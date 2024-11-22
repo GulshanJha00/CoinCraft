@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CryptoCardProps {
+  id: string;
   img: string;
   name: string;
   currentPrice: number;
@@ -11,6 +13,7 @@ interface CryptoCardProps {
 }
 
 const CryptoCard: React.FC<CryptoCardProps> = ({
+  id,
   img,
   name,
   currentPrice,
@@ -38,6 +41,8 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
   };
 
   return (
+    <Link href={`/home/${id}`}>
+    
     <div className="max-w-[20rem] w-full bg-gray-300 border border-green-500 text-black rounded-xl overflow-hidden shadow-lg transform transition-all hover:scale-105 dark:bg-gray-800 dark:text-white flex flex-col">
       <div className="flex items-center p-4 space-x-4">
         {/* Image on the left side */}
@@ -85,6 +90,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
         </div>
       </div>
     </div>
+    </Link>
   );
 };
 

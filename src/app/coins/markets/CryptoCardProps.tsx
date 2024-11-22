@@ -110,11 +110,13 @@ export default function CryptoList() {
       </div>
 
       {/* Crypto Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+      <div className="flex justify-center items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 gap-7">
         {/* Map over the cryptoData array */}
         {cryptoData.map((crypto) => (
           <CryptoCard
             key={crypto.id}
+            id={crypto.id}
             img={crypto.image}
             name={crypto.name}
             currentPrice={crypto.current_price}
@@ -123,6 +125,8 @@ export default function CryptoList() {
           />
         ))}
       </div>
+      </div>
+      
     </div>
   </div>
   );
