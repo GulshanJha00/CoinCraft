@@ -13,7 +13,7 @@ export default function NotFound() {
       {/* Subtitle */}
       <p className="text-xl sm:text-2xl text-gray-300 mb-8 text-center px-4">
         Oops! This page seems to have gone off-chain. <br />
-        Let's get you back on track.
+        Let&apos;s get you back on track.
       </p>
 
       {/* Go Home Button */}
