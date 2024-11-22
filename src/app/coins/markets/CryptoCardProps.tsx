@@ -22,9 +22,10 @@ export default function CryptoList() {
     <div className="grid grid-cols-5 gap-7">
 
     {
-        cryptocurrencies.map((crypto)=>{
+        cryptocurrencies.map((crypto, index)=>{
             return(
                 <CryptoCard
+                key={index}
                 name = {crypto.name}
                 currentPrice={crypto.currentPrice}
                 symbol={crypto.symbol}
