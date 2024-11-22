@@ -1,7 +1,7 @@
 "use client"; // Enables interactivity
 
 import React from "react";
-
+import Link from "next/link";
 const Homepage: React.FC = () => {
   return (
     <div>
@@ -23,13 +23,17 @@ const Homepage: React.FC = () => {
           <p className="text-xl font-light mb-8 max-w-3xl mx-auto text-gray-200">
             Real-time data, personalized tracking, and an intuitive interface. Take control of your investments and explore the world of cryptocurrency like never before.
           </p>
+          <Link href={"/start"}>
+          
           <button
             className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-orange-400 via-red-500 to-pink-600 text-white rounded-lg shadow-2xl transition-all duration-300 hover:scale-105 transform"
             onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
             Start Tracking
-          </button>
+          </button>`
+          
+          </Link>
         </div>
       </section>
 
