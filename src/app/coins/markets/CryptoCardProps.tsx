@@ -57,25 +57,73 @@ export default function CryptoList() {
 
   return (
     <div className="relative min-h-screen bg-[url('/mainbg.jpg')] bg-cover bg-center bg-fixed">
-      {/* Blur the background */}
-      <div className="absolute inset-0 backdrop-blur-sm"></div>
-      
-      {/* Content container to prevent blur */}
-      <div className="relative bg-black bg-opacity-50 min-h-screen px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
-          {/* Map over the cryptoData array */}
-          {cryptoData.map((crypto) => (
-            <CryptoCard
-              key={crypto.id}
-              img={crypto.image}
-              name={crypto.name}
-              currentPrice={crypto.current_price}
-              symbol={crypto.symbol}
-              market_cap_change_percentage_24h={crypto.market_cap_change_percentage_24h}
-            />
-          ))}
+    {/* Blur the background */}
+    <div className="absolute inset-0 backdrop-blur-sm"></div>
+
+    {/* Content container to prevent blur */}
+    <div className="relative bg-black bg-opacity-50 min-h-screen px-4 sm:px-8 py-10">
+      <div className="w-full flex justify-center items-center">
+        <h1 className="text-3xl sm:text-6xl text-center text-yellow-400 font-bold">
+          Cryptocurrency Dashboard
+        </h1>
+      </div>
+
+      {/* Description and Search Box */}
+      <div className="text-center text-white mt-6">
+        <p className="text-lg sm:text-xl mb-4">
+          Track real-time cryptocurrency prices, market caps, and trends
+        </p>
+
+        {/* Search Box */}
+        <div className="flex justify-center mb-6">
+          <input
+            type="text"
+            placeholder="Search for a cryptocurrency"
+            className="px-4 py-2 rounded-lg text-black dark:text-white border border-yellow-600 w-full sm:w-80 md:w-96 focus:outline-none"
+          />
+        </div>
+
+        {/* Dropdowns */}
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8">
+          {/* Dropdown 1 */}
+          <select className="px-5 py-2 rounded-lg bg-white dark:bg-gray-800 dark:text-white text-black w-full sm:w-auto">
+            <option value="usd">USD</option>
+            <option value="inr">INR</option>
+            <option value="eur">EUR</option>
+            <option value="gbp">GBP</option>
+          </select>
+
+          {/* Dropdown 2 */}
+          <select className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 dark:text-white text-black w-full sm:w-auto">
+            <option value="#">Market Cap</option>
+            <option value="htol">High to Low</option>
+            <option value="ltoh">Low to High</option>
+          </select>
+
+          {/* Dropdown 3 */}
+          <select className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 dark:text-white text-black w-full sm:w-auto">
+          <option value="#">Price</option>
+            <option value="priceH">High to low</option>
+            <option value="priceL">Price Low to high</option>
+          </select>
         </div>
       </div>
+
+      {/* Crypto Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+        {/* Map over the cryptoData array */}
+        {cryptoData.map((crypto) => (
+          <CryptoCard
+            key={crypto.id}
+            img={crypto.image}
+            name={crypto.name}
+            currentPrice={crypto.current_price}
+            symbol={crypto.symbol}
+            market_cap_change_percentage_24h={crypto.market_cap_change_percentage_24h}
+          />
+        ))}
+      </div>
     </div>
+  </div>
   );
 }
