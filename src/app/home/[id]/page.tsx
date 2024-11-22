@@ -104,7 +104,6 @@ const CryptoAnalysisPage: React.FC = () => {
   if (loading) {
     return <p style={{ textAlign: 'center', fontSize: '18px', color: '#555' }}>Loading data...</p>;
   }
-  
 
   if (error) {
     return <p style={{ textAlign: 'center', color: 'red', fontWeight: 'bold' }}>{error}</p>;
