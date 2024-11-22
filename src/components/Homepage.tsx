@@ -31,7 +31,7 @@ const Homepage: React.FC = () => {
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
             Start Tracking
-          </button>`
+          </button>
           
           </Link>
         </div>
