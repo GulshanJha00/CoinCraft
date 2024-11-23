@@ -100,23 +100,23 @@ const Navbar: React.FC = () => {
               Home
             </Link>
             <Link
-              href="/favorites"
+              href="/home/favorites"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
               } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               Favorites
             </Link>
-            <a
-              href="#exchanges"
+            <Link
+              href="/home/exchange"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
               } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               Exchanges
-            </a>
+            </Link>
             <Link
-              href="/about"
+              href="/home/about"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
               } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}

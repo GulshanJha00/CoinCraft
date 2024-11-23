@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import CryptoCard from "../coins/markets/CryptoCard";
+import CryptoCard from "../../coins/markets/CryptoCard";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -38,7 +38,7 @@ export default function Favourites() {
 
   return (
     <div className="relative min-h-screen bg-[url('/fev2.png')] bg-cover bg-center bg-fixed">
-      <div className="absolute inset-0 backdrop-blur-sm  dark:bg-black bg-white opacity-50"></div> {/* Softer opacity */}
+      <div className="absolute inset-0 backdrop-blur-sm  dark:bg-black bg-white dark:opacity-70 opacity-30"></div> {/* Softer opacity */}
       
       <div className="relative min-h-screen px-4 sm:px-8 py-10 ">
         <div className="w-full flex justify-center items-center mb-6">
@@ -73,10 +73,10 @@ export default function Favourites() {
                   alt="No favorites yet" 
                   className="w-48 mb-6 animate-pulse"
                 />
-                <p className="text-xl sm:text-2xl text-gray-300 mb-4">
+                <p className="text-xl sm:text-2xl text-black dark:text-gray-300 mb-4">
                   You don&apos;t have any favorite cryptos yet!
                 </p>
-                <p className="text-lg sm:text-xl text-gray-400 mb-6">
+                <p className="text-lg sm:text-xl text-black dark:text-gray-300 mb-6">
                   Browse cryptos and tap the STAR to keep your top picks.
                 </p>
                 <Link href={"home"}>

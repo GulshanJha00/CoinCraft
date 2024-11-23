@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import CryptoCard from "./CryptoCard";
@@ -20,14 +20,12 @@ export default function CryptoList() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
-const totalPages = 8  // Example: You might calculate this if needed
+  const totalPages = 8; // Example: You might calculate this if needed
   // Fetch data from API
   useEffect(() => {
     const fetchCoin = async () => {
       try {
-        
         const response = await axios.get<Crypto[]>(
           "https://api.coingecko.com/api/v3/coins/markets",
           {
@@ -35,7 +33,7 @@ const totalPages = 8  // Example: You might calculate this if needed
               vs_currency: "usd",
               order: "market_cap_desc",
               page: currentPage, // Use currentPage for pagination
-            per_page: 10, // Optional: Limit items per page
+              per_page: 10, // Optional: Limit items per page
             },
           }
         );
@@ -52,9 +50,10 @@ const totalPages = 8  // Example: You might calculate this if needed
 
   // Handle search functionality
   useEffect(() => {
-    const filteredCryptos = cryptoData.filter((crypto) => 
-      crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCryptos = cryptoData.filter(
+      (crypto) =>
+        crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filteredCryptos); // Update the filtered data when the search term changes
   }, [searchTerm, cryptoData]); // Re-run the effect when searchTerm or cryptoData changes
@@ -63,10 +62,22 @@ const totalPages = 8  // Example: You might calculate this if needed
     return (
       <div className="flex items-center justify-center h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0s" }}></div>
-          <div className="w-4 h-4 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-          <div className="w-4 h-4 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-          <div className="w-4 h-4 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: "0.3s" }}></div>
+          <div
+            className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0s" }}
+          ></div>
+          <div
+            className="w-4 h-4 bg-green-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.1s" }}
+          ></div>
+          <div
+            className="w-4 h-4 bg-yellow-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
+          <div
+            className="w-4 h-4 bg-red-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.3s" }}
+          ></div>
         </div>
       </div>
     );
@@ -81,7 +92,8 @@ const totalPages = 8  // Example: You might calculate this if needed
       <div className="relative bg-black bg-opacity-50 min-h-screen px-4 sm:px-8 py-10">
         <div className="w-full flex justify-center items-center">
           <h1 className="text-3xl sm:text-6xl text-center font-bold text-yellow-400 dark:text-white">
-            Crypto <span className="text-white dark:text-yellow-400">Dashboard</span>
+            Crypto{" "}
+            <span className="text-white dark:text-yellow-400">Dashboard</span>
           </h1>
         </div>
 
@@ -139,13 +151,17 @@ const totalPages = 8  // Example: You might calculate this if needed
             {filteredData.map((crypto) => (
               <CryptoCard
                 key={crypto.id}
-                removeFromFavorites={(id) => console.log(`Removing favorite: ${id}`)}
+                removeFromFavorites={(id) =>
+                  console.log(`Removing favorite: ${id}`)
+                }
                 id={crypto.id}
                 img={crypto.image}
                 name={crypto.name}
                 currentPrice={crypto.current_price}
                 symbol={crypto.symbol}
-                market_cap_change_percentage_24h={crypto.market_cap_change_percentage_24h}
+                market_cap_change_percentage_24h={
+                  crypto.market_cap_change_percentage_24h
+                }
               />
             ))}
           </div>
@@ -153,26 +169,26 @@ const totalPages = 8  // Example: You might calculate this if needed
       </div>
 
       <div className="relative flex justify-center items-center mt-8">
-  <button
-    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-    disabled={currentPage === 1}
-    className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
-  >
-    Previous
-  </button>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
+        >
+          Previous
+        </button>
 
-  <span className="mx-4 text-white">
-    Page {currentPage} of {totalPages}
-  </span>
+        <span className="mx-4 text-white">
+          Page {currentPage} of {totalPages}
+        </span>
 
-  <button
-    onClick={() => setCurrentPage((prev) => prev + 1)}
-    disabled={currentPage === totalPages}
-    className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
-  >
-    Next
-  </button>
-</div>
+        <button
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
