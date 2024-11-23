@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
           className={`text-yellow-400 font-extrabold lg:text-4xl sm:text-2xl text-lg tracking-wide`}
         >
           <h1 className="hover:text-yellow-300 transition-all duration-300">
-            Coin<span className="text-white drop-shadow-lg">Verse</span>
+            Coin<span className="text-blue-500 dark:text-white drop-shadow-lg ">Verse</span>
           </h1>
         </div>
 
@@ -87,12 +87,12 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-8 text-xl font-bold">
+          <div className="hidden lg:flex items-center gap-8 text-xl font-bold ">
             <a
               href="#favorites"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
-              } ${textColor} transition-colors duration-300`}
+              } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               Favorites
             </a>
@@ -100,7 +100,7 @@ const Navbar: React.FC = () => {
               href="#exchanges"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
-              } ${textColor} transition-colors duration-300`}
+              } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               Exchanges
             </a>
@@ -108,7 +108,7 @@ const Navbar: React.FC = () => {
               href="#about"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
-              } ${textColor} transition-colors duration-300`}
+              } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               About
             </a>

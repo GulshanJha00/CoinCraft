@@ -37,72 +37,90 @@ const Homepage: React.FC = () => {
     <div>
       {/* Hero Section */}
       <section
-        className="h-screen bg-cover bg-center relative flex items-center justify-center text-yellow-800 text-center"
+        className="h-screen bg-cover bg-center relative flex items-center justify-center text-gray-800 dark:text-white text-center"
         style={{
           backgroundImage: `url('/bg-homepage.jpg')`,
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
-        <div className="relative z-10 max-w-4xl px-6 text-center animate__animated animate__fadeIn">
-          <h1 className="text-6xl font-extrabold tracking-tight text-white mb-4">
-            CryptoTrack: Track Your Crypto Journey
+        {/*  Background */}
+
+        <div className="absolute backdrop-blur-[5px] inset-0 bg-gray-400 dark:bg-black opacity-30 dark:bg-black"></div>
+
+        <div className="relative z-10 max-w-4xl p-10 text-center">
+          <h1
+            className="text-2xl text-gray-300 dark:text-white sm:text-3xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text mb-4 animate__animated animate__fadeInUp"
+            style={{
+              textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <span className="text-yellow-400 dark:text-yellow-400">
+              CryptoTrack:
+            </span>{" "}
+            Track Your Crypto{" "}
+            <span className="underline decoration-yellow-600 dark:decoration-yellow-400">
+              Journey
+            </span>
           </h1>
-          <div className="relative overflow-hidden">
-            <div
-              className="flex items-center gap-6 animate-scroll"
-              style={{
-                animation: "scroll 20s linear infinite",
-              }}
-            >
-              {loading
-                ? Array.from({ length: 10 }, (_, i) => (
-                    <div
-                      key={i}
-                      className="min-w-[250px] bg-yellow-100 border border-yellow-400 rounded-lg shadow-lg p-4 flex flex-col items-center text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:bg-yellow-200"
-                    >
-                      <div className="w-16 h-16 bg-gray-700 rounded-full mb-4"></div>
-                      <div className="w-24 h-4 bg-gray-700 rounded mb-2"></div>
-                      <div className="w-16 h-4 bg-gray-700 rounded"></div>
-                    </div>
-                  ))
-                : [...cryptoData, ...cryptoData].map((coin, index) => (
-                    <div
-                      key={`${coin.id}-${index}`}
-                      className="min-w-[250px] bg-yellow-200 border border-yellow-500 rounded-lg shadow-lg p-4 flex flex-col items-center text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:bg-yellow-300 dark:bg-green-500"
-                    >
-                      <Image
-                        src={coin.image}
-                        alt={coin.name}
-                        width={200}
-                        height={200}
-                        className="w-16 h-16 mb-4"
-                      />
-                      <h3 className="text-xl font-bold text-yellow-700">
-                        {coin.name}
-                      </h3>
-                      <p className="text-lg text-green-400">
-                        ${coin.current_price}
-                      </p>
-                      <p
-                        className={`text-sm ${
-                          coin.price_change_percentage_24h > 0
-                            ? "text-green-500"
-                            : "text-red-500"
-                        }`}
-                      >
-                        {coin.price_change_percentage_24h.toFixed(2)}%
-                      </p>
-                    </div>
-                  ))}
-            </div>
-          </div>
-          <p className="text-xl font-light mb-8 max-w-3xl mx-auto text-yellow-700">
-            Real-time data, personalized tracking, and an intuitive interface.
-            Take control of your investments and explore the world of
-            cryptocurrency like never before.
-          </p>
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+
+
+
+
+     
+
+                  
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <p
+  className="text-xl sm:text-lg mb-8 max-w-full mx-auto font-bold text-yellow-600 dark:text-yellow-200 bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-50 p-4 rounded-lg shadow-lg"
+  style={{
+    textShadow: "1px 1px 1px rgba(0, 0, 0, 0.5)",
+  }}
+>
+  Real-time data, personalized tracking, and an intuitive interface.
+  <span className="font-bold text-gray-800 dark:text-white">
+    {" "}
+    Dive Into the Details and Stay Ahead in the Crypto Game
+  </span>
+</p>
+
           <Link href={"/home"}>
-            <button className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white rounded-lg shadow-2xl transition-all duration-300 hover:scale-105 transform">
+            <button className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 dark:from-yellow-500 dark:via-yellow-600 dark:to-yellow-700 text-gray-800 dark:text-white rounded-xl shadow-2xl transition-transform duration-300 hover:scale-110 transform">
               Start Tracking
             </button>
           </Link>
@@ -110,24 +128,45 @@ const Homepage: React.FC = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-20 px-8 bg-gray-900 text-white text-center">
-        <h2 className="text-5xl font-extrabold tracking-tight mb-6 text-yellow-700">
-          Why Choose CryptoTrack?
+      <section className="py-20 px-8 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white text-center transition-colors duration-500"
+      >
+        <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-6"
+        style={{
+          textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)",
+        }}>
+          Why Choose{" "}
+          <span className="underline decoration-yellow-600 text-yellow-500 dark:decoration-yellow-400">
+            CryptoTrack?
+          </span>
         </h2>
-        <p className="text-lg font-light mb-8 max-w-4xl mx-auto text-yellow-700">
-          CryptoTrack is built for both beginners and professionals. Experience
-          lightning-fast updates, visualized market trends, and the tools you
-          need to stay ahead in the game.
+        <p className="text-lg sm:text-base font-light mb-8 max-w-4xl mx-auto">
+          CryptoTrack is built for both{" "}
+          <span className="text-yellow-600 dark:text-yellow-400 font-bold">
+            beginners and professionals.
+          </span>{" "}
+          Experience{" "}
+          <span className="text-yellow-600 dark:text-yellow-400 font-bold">
+            lightning-fast updates, visualized market trends,
+          </span>{" "}
+          and the tools you need to stay{" "}
+          <span className="text-yellow-600 dark:text-yellow-400 font-bold">
+            ahead
+          </span>{" "}
+          in the game.
         </p>
-        <button className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white rounded-lg shadow-2xl transition-all duration-300 hover:scale-105 transform">
+        <button className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 dark:from-yellow-600 dark:via-yellow-700 dark:to-yellow-800 text-gray-800 dark:text-white rounded-xl shadow-2xl transition-transform duration-300 hover:scale-105 transform">
           Explore Now
         </button>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-gray-800 text-white text-center">
+      <footer className="py-8 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white text-center transition-colors duration-500">
         <p className="text-lg">
-          &copy; {new Date().getFullYear()} CryptoTrack. All Rights Reserved.
+          &copy; {new Date().getFullYear()}{" "}
+          <span className="text-yellow-600 dark:text-yellow-400 font-bold">
+            CryptoTrack
+          </span>
+          . All Rights Reserved.
         </p>
       </footer>
     </div>
