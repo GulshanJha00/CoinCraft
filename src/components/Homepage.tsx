@@ -44,7 +44,7 @@ const Homepage: React.FC = () => {
       >
         {/*  Background */}
 
-        <div className="absolute backdrop-blur-[5px] inset-0 bg-gray-400 dark:bg-black opacity-30 dark:bg-black"></div>
+        <div className="absolute backdrop-blur-[5px] inset-0 bg-gray-400 dark:bg-transparent opacity-30 dark:bg-black"></div>
 
         <div className="relative z-10 max-w-4xl p-10 text-center">
           <h1
@@ -74,7 +74,61 @@ const Homepage: React.FC = () => {
 
 
           
-          
+          <div className="relative overflow-hidden w-full hidden lg:flex">
+  <br />
+  <div
+    className="flex items-center gap-8 animate-scroll md:w-full"
+    style={{
+      animation: "scroll 20s linear infinite",
+    }}
+  >
+    {loading
+      ? Array.from({ length: 10 }, (_, i) => (
+          <div
+            key={i}
+            className="min-w-[200px] sm:min-w-[250px] bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-400 dark:from-yellow-100 dark:via-yellow-200 dark:to-yellow-300 border border-yellow-400 rounded-xl shadow-lg p-4 flex flex-col items-center text-center animate__animated animate__fadeIn"
+          >
+            <div className="w-16 h-16 bg-gray-300 dark:bg-gray-700 rounded-full mb-4"></div>
+            <div className="w-24 h-4 bg-gray-300 dark:bg-gray-700 rounded mb-2"></div>
+            <div className="w-16 h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+          </div>
+        ))
+      : cryptoData.map((coin, index) => (
+          <div
+            key={`${coin.id}-${index}`}
+            className={`lg:min-w-[250px] rounded-xl p-4 flex flex-col items-center text-center transition-all duration-300 hover:scale-110 hover:shadow-xl transform ${
+              coin.price_change_percentage_24h > 0
+                ? "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 dark:from-yellow-500 dark:via-yellow-600 dark:to-yellow-700"
+                : "bg-gradient-to-r from-yellow-600 via-yellow-700 to-yellow-800 dark:from-yellow-700 dark:via-yellow-800 dark:to-yellow-900"
+            }`}
+          >
+            <Image
+              src={coin.image}
+              alt={coin.name}
+              width={200}
+              height={200}
+              className="w-16 h-16 mb-4 transform transition-all duration-300 hover:scale-125"
+            />
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white hover:text-yellow-800 dark:hover:text-yellow-200 transition-all duration-200">
+              {coin.name}
+            </h3>
+            <p className="text-lg text-yellow-700 dark:text-yellow-100 hover:text-yellow-800 dark:hover:text-yellow-300 transition-all duration-300">
+              ${coin.current_price.toFixed(2)}
+            </p>
+            <p
+              className={`text-sm ${
+                coin.price_change_percentage_24h > 0
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
+              }`}
+            >
+              {coin.price_change_percentage_24h.toFixed(2)}%
+            </p>
+          </div>
+      ))}
+  </div>
+  <br />
+</div>
 
 
 
