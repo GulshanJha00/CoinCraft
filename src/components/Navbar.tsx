@@ -16,25 +16,34 @@ const Navbar: React.FC = () => {
   // Return null during SSR to avoid mismatch in HTML
   if (!mounted) return null;
 
+  const navbarBg =
+    theme === "dark"
+      ? "bg-opacity-20 backdrop-blur-lg bg-yellow-50 "
+      : "bg-white shadow-md";
+  const textColor = theme === "dark" ? "text-white" : "text-yellow-400";
+
   return (
     <>
       {/* Navbar Container */}
-      <div className="bg-blue-900 flex sticky top-0 z-10 justify-between items-center w-full h-20 px-8 py-4 shadow-lg">
-        
+      <div
+        className={`flex sticky top-0 z-50 justify-between items-center w-full h-20 px-8 py-4 ${navbarBg} transition-colors duration-300`}
+      >
         {/* Title Section on the left */}
-        <div className="text-yellow-400 font-bold lg:text-3xl sm:text-xl text-md">
-          <h1>Coin Verse</h1>
+        <div
+          className={`text-yellow-400 font-extrabold lg:text-4xl sm:text-2xl text-lg tracking-wide`}
+        >
+          <h1 className="hover:text-yellow-300 transition-all duration-300">
+            Coin<span className="text-white drop-shadow-lg">Verse</span>
+          </h1>
         </div>
 
         {/* Right Section - Theme Toggle & Hamburger Menu */}
-        <div className="flex lg:gap-8 gap-4 items-center">
-          
+        <div className="flex items-center gap-4">
           {/* Theme Toggle Button */}
           <button
-            className="z-50 bg-transparent text-white h-[3rem] w-[3rem] border-2 border-white rounded-full flex justify-center items-center hover:bg-gray-700 focus:ring-2 focus:ring-blue-500 transition-all"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")} // Toggle theme
+            className="bg-transparent h-[3rem] w-[3rem] border-2 dark:border-white border-black rounded-full flex justify-center items-center hover:bg-gray-700 focus:ring-2 focus:ring-blue-500 transition-all"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
-            {/* Conditionally render icon based on current theme */}
             {theme === "dark" ? (
               <Sun className="h-[1.5rem] w-[1.5rem] transition-all" />
             ) : (
@@ -43,39 +52,68 @@ const Navbar: React.FC = () => {
             <span className="sr-only">Toggle theme</span>
           </button>
 
-          {/* Mobile Hamburger Menu Button (Visible only below 'md' screen) */}
+          {/* Mobile Hamburger Menu Button (Visible only below 'lg') */}
           <button
-            className="lg:hidden text-white text-3xl z-20" // Added z-20 to make sure button is above the overlay
-            onClick={() => setIsMenuOpen(!isMenuOpen)} // Toggle mobile menu visibility
+            className={`lg:hidden ${textColor} text-3xl z-20`}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {/* Hamburger icon when menu is closed, Cross when menu is open */}
             {isMenuOpen ? (
-              <span className="text-3xl">&#10005;</span> // Cross icon
+              <span className="text-3xl">&#10005;</span>
             ) : (
-              <span className="text-3xl">&#9776;</span> // Hamburger icon
+              <span className="text-3xl">&#9776;</span>
             )}
           </button>
-        </div>
-        
-        {/* Mobile Menu - Show on screens below 'md' */}
-        <div
-          className={`lg:hidden fixed top-0 left-0 w-full bg-blue-900 bg-opacity-95 flex flex-col items-center justify-center space-y-4 p-6 transition-transform duration-300 ${isMenuOpen ? "translate-y-0" : "-translate-y-full"}`}
-        >
-          <nav className="flex flex-col items-center gap-4 text-white text-xl">
-            <a href="#home" className="hover:text-yellow-400">Home</a>
-            <a href="#favorites" className="hover:text-yellow-400">Favorites</a>
-            <a href="#exchanges" className="hover:text-yellow-400">Exchanges</a>
-            <a href="#about" className="hover:text-yellow-400">About</a>
-          </nav>
-        </div>
 
-        {/* Desktop Menu - Show on large screens */}
-        <div className="hidden lg:flex flex-row gap-8 items-center text-white text-xl">
-          <a href="#favorites" className="hover:text-yellow-400">Favorites</a>
-          <a href="#exchanges" className="hover:text-yellow-400">Exchanges</a>
-          <a href="#about" className="hover:text-yellow-400">About</a>
-        </div>
+          {/* Mobile Menu */}
+          <div
+            className={`lg:hidden fixed top-0 left-0 w-full bg-blue-900 bg-opacity-95 flex flex-col items-center justify-center space-y-4 p-6 transition-transform duration-300 ${
+              isMenuOpen ? "translate-y-0" : "-translate-y-full"
+            }`}
+          >
+            <nav className="flex flex-col items-center gap-4 text-xl">
+              <a href="#home" className={`${textColor}`}>
+                Home
+              </a>
+              <a href="#favorites" className={`${textColor}`}>
+                Favorites
+              </a>
+              <a href="#exchanges" className={`${textColor}`}>
+                Exchanges
+              </a>
+              <a href="#about" className={`${textColor}`}>
+                About
+              </a>
+            </nav>
+          </div>
 
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center gap-8 text-xl font-bold">
+            <a
+              href="#favorites"
+              className={`hover:${
+                theme === "dark" ? "text-yellow-400" : "text-black"
+              } ${textColor} transition-colors duration-300`}
+            >
+              Favorites
+            </a>
+            <a
+              href="#exchanges"
+              className={`hover:${
+                theme === "dark" ? "text-yellow-400" : "text-black"
+              } ${textColor} transition-colors duration-300`}
+            >
+              Exchanges
+            </a>
+            <a
+              href="#about"
+              className={`hover:${
+                theme === "dark" ? "text-yellow-400" : "text-black"
+              } ${textColor} transition-colors duration-300`}
+            >
+              About
+            </a>
+          </div>
+        </div>
       </div>
     </>
   );
