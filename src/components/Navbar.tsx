@@ -2,7 +2,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
-
+import Link from "next/link";
 const Navbar: React.FC = () => {
   const { setTheme, theme } = useTheme(); // Theme context for toggling light/dark modes
   const [mounted, setMounted] = useState(false); // State to track if the component has mounted
@@ -32,9 +32,12 @@ const Navbar: React.FC = () => {
         <div
           className={`text-yellow-400 font-extrabold lg:text-4xl sm:text-2xl text-lg tracking-wide`}
         >
-          <h1 className="hover:text-yellow-300 transition-all duration-300">
-            Coin<span className="text-blue-500 dark:text-white drop-shadow-lg ">Verse</span>
-          </h1>
+          <Link href={"/"}>
+          
+            <h1 className="hover:text-yellow-300 transition-all duration-300">
+              Coin<span className="text-blue-500 dark:text-white drop-shadow-lg ">Verse</span>
+            </h1>
+          </Link>
         </div>
 
         {/* Right Section - Theme Toggle & Hamburger Menu */}
@@ -88,14 +91,22 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-8 text-xl font-bold ">
-            <a
-              href="#favorites"
+          <Link
+              href="/home"
+              className={`hover:${
+                theme === "dark" ? "text-yellow-400" : "text-black"
+              } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
+            >
+              Home
+            </Link>
+            <Link
+              href="/favorites"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
               } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               Favorites
-            </a>
+            </Link>
             <a
               href="#exchanges"
               className={`hover:${
