@@ -37,13 +37,13 @@ export default function Favourites() {
   );
 
   return (
-    <div className="relative min-h-screen bg-[url('/mainbg.jpg')] bg-cover bg-center bg-fixed">
-      <div className="absolute inset-0 backdrop-blur-lg bg-black bg-opacity-40"></div> {/* Softer opacity */}
+    <div className="relative min-h-screen bg-[url('/fev2.png')] bg-cover bg-center bg-fixed">
+      <div className="absolute inset-0 backdrop-blur-sm  dark:bg-black bg-white opacity-50"></div> {/* Softer opacity */}
       
-      <div className="relative min-h-screen px-4 sm:px-8 py-10">
+      <div className="relative min-h-screen px-4 sm:px-8 py-10 ">
         <div className="w-full flex justify-center items-center mb-6">
-          <h1 className="text-3xl sm:text-6xl text-center font-bold text-yellow-400">
-            Your Favorite Cryptos
+          <h1 className="text-3xl sm:text-6xl mb-10 text-center font-bold text-yellow-400">
+            Your Favo<span className="text-white">rite Cryptos</span>
           </h1>
         </div>
 

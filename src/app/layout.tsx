@@ -34,7 +34,7 @@ export default function RootLayout({
         <Suspense fallback={<Loading />}>
           {/* Toast container to handle toast notifications globally */}
           <ToastContainer
-            position="top-right"
+            position="top-center"
             autoClose={3000}
             hideProgressBar={true}
           />

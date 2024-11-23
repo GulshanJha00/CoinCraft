@@ -115,14 +115,14 @@ const Navbar: React.FC = () => {
             >
               Exchanges
             </a>
-            <a
-              href="#about"
+            <Link
+              href="/about"
               className={`hover:${
                 theme === "dark" ? "text-yellow-400" : "text-black"
               } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               About
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,28 +1,115 @@
-'use client';
+"use client";
 
-export default function AboutSection() {
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+
+function AboutPage() {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const cardRefs = [
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null)
+  ];
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const timeline = gsap.timeline({ defaults: { ease: "power3.out", duration: 1.2 } });
+
+    // Animation for title and subtitle
+    timeline.fromTo(
+      titleRef.current,
+      { opacity: 0, y: -60 },
+      { opacity: 1, y: 0, ease: "bounce.out" }
+    );
+    timeline.fromTo(
+      subtitleRef.current,
+      { opacity: 0, x: -60 },
+      { opacity: 1, x: 0 },
+      "<0.5"
+    );
+
+    // Card animations - each one enters with a different effect
+    cardRefs.forEach((card, index) => {
+      timeline.fromTo(
+        card.current,
+        { opacity: 0, y: 50, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, delay: index * 0.2, ease: "back.out(1.7)" }
+      );
+    });
+
+    // Button animation
+    timeline.fromTo(
+      buttonRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0 },
+      "<0.5"
+    );
+  }, []); // Empty dependency array ensures the effect runs only once
+
   return (
-    <section className="relative bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 py-16 sm:py-12 px-6">
-      {/* Semi-Sexy Background Animation */}
-      <div className="absolute inset-0 bg-cover bg-center opacity-30">
-        <div className="h-full w-full bg-gradient-to-r from-black via-transparent to-black"></div>
-      </div>
-      
-      {/* Content */}
-      <div className="relative z-10 container mx-auto text-center">
-        <h2 className="text-4xl sm:text-3xl text-white font-semibold mb-6 animate__animated animate__fadeInUp">
-          Welcome to Our Amazing Platform!
-        </h2>
-        <p className="text-lg sm:text-base text-white opacity-80 mb-6 animate__animated animate__fadeInUp animate__delay-1s">
-          We offer a one-stop solution for all your cryptocurrency needs. Stay updated with real-time data and insights, tailored to help you make informed decisions.
-        </p>
-        <a
-          href="#"
-          className="inline-block px-6 py-3 bg-pink-600 text-white rounded-full text-lg sm:text-base hover:bg-pink-700 transition ease-in-out duration-300 animate__animated animate__fadeInUp animate__delay-2s"
+    <div className="relative min-h-screen p-10 overflow-hidden bg-gradient-to-r from-blue-700 via-purple-800 to-indigo-800">
+      {/* Container */}
+      <div className="max-w-6xl mx-auto flex flex-col items-center text-center space-y-10 relative z-10">
+        {/* Title */}
+        <h1
+          ref={titleRef}
+          className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-yellow-500 to-orange-400 bg-clip-text text-transparent"
         >
-          Learn More
-        </a>
+          About CryptoVista
+        </h1>
+
+        {/* Subtitle */}
+        <p
+          ref={subtitleRef}
+          className="text-lg sm:text-xl font-medium text-gray-200 max-w-4xl"
+        >
+          CryptoVista is a platform designed to simplify the complex world of cryptocurrencies. Whether you&apos;re a seasoned trader or a curious beginner, CryptoVista helps you make informed decisions with ease.
+        </p>
+
+        {/* Card Section */}
+        <div className="flex flex-col sm:flex-row gap-6 justify-center w-full">
+          <div
+            ref={cardRefs[0]}
+            className="w-full sm:w-1/3 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+          >
+            <h2 className="text-2xl font-semibold text-yellow-500 mb-4">Our Vision</h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              We aim to bridge the gap between the complexity of cryptocurrencies and the everyday user. Our vision is to create a platform that makes crypto accessible for all.
+            </p>
+          </div>
+
+          <div
+            ref={cardRefs[1]}
+            className="w-full sm:w-1/3 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+          >
+            <h2 className="text-2xl font-semibold text-yellow-500 mb-4">Our Features</h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              With real-time price tracking, customizable watchlists, and easy-to-understand market analysis, CryptoVista provides all the tools you need to stay ahead in the crypto world.
+            </p>
+          </div>
+
+          <div
+            ref={cardRefs[2]}
+            className="w-full sm:w-1/3 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+          >
+            <h2 className="text-2xl font-semibold text-yellow-500 mb-4">About the Developer</h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              Hi, I&apos;m Gulshan, the creator behind CoinVerse. I&apos;m passionate about building products that make complex subjects like cryptocurrencies easier to understand and more accessible for everyone.
+            </p>
+          </div>
+        </div>
+
+        {/* Call to Action */}
+        <button
+          ref={buttonRef}
+          className="mt-10 px-6 py-3 bg-yellow-500 text-white font-semibold rounded-lg shadow-lg hover:bg-orange-500 transform hover:scale-105 transition-all duration-300"
+        >
+          Explore Features
+        </button>
       </div>
-    </section>
+    </div>
   );
 }
+
+export default AboutPage;
