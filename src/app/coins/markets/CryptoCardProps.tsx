@@ -20,16 +20,22 @@ export default function CryptoList() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
+
+  const [currentPage, setCurrentPage] = useState(1); // Track the current page
+const totalPages = 8  // Example: You might calculate this if needed
+  // Fetch data from API
   useEffect(() => {
     const fetchCoin = async () => {
       try {
+        
         const response = await axios.get<Crypto[]>(
           "https://api.coingecko.com/api/v3/coins/markets",
           {
             params: {
               vs_currency: "usd",
               order: "market_cap_desc",
-              page: 1,
+              page: currentPage, // Use currentPage for pagination
+            per_page: 10, // Optional: Limit items per page
             },
           }
         );
@@ -42,15 +48,16 @@ export default function CryptoList() {
       }
     };
     fetchCoin();
-  }, []);
+  }, [currentPage]);
 
   // Handle search functionality
   useEffect(() => {
-    const filtered = cryptoData.filter((crypto) =>
-      crypto.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCryptos = cryptoData.filter((crypto) => 
+      crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setFilteredData(filtered);
-  }, [searchTerm, cryptoData]);
+    setFilteredData(filteredCryptos); // Update the filtered data when the search term changes
+  }, [searchTerm, cryptoData]); // Re-run the effect when searchTerm or cryptoData changes
 
   if (loading) {
     return (
@@ -86,7 +93,7 @@ export default function CryptoList() {
               type="text"
               placeholder="Search for a cryptocurrency"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)} // Update search term as user types
               className="px-4 py-2 rounded-lg text-black dark:text-white border border-yellow-600 dark:border-yellow-400 w-full sm:w-80 md:w-96 focus:outline-none"
             />
           </div>
@@ -144,6 +151,28 @@ export default function CryptoList() {
           </div>
         </div>
       </div>
+
+      <div className="relative flex justify-center items-center mt-8">
+  <button
+    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+    disabled={currentPage === 1}
+    className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
+  >
+    Previous
+  </button>
+
+  <span className="mx-4 text-white">
+    Page {currentPage} of {totalPages}
+  </span>
+
+  <button
+    onClick={() => setCurrentPage((prev) => prev + 1)}
+    disabled={currentPage === totalPages}
+    className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
     </div>
   );
 }

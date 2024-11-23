@@ -28,11 +28,17 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <Suspense fallback={<Loading />}>
           {/* Toast container to handle toast notifications globally */}
-          <ToastContainer position="top-right" autoClose={3000} hideProgressBar={true} />
-          
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={true}
+          />
+
           {/* ThemeProvider for theme control */}
           <ThemeProvider
             attribute="class"
@@ -40,8 +46,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
-            {children}
+              <Navbar />
+              {children}
           </ThemeProvider>
         </Suspense>
       </body>
