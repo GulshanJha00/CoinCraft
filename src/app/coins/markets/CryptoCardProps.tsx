@@ -11,6 +11,7 @@ interface Crypto {
   name: string;
   current_price: number;
   symbol: string;
+  market_cap: number;
   market_cap_change_percentage_24h: number;
 }
 
@@ -19,10 +20,11 @@ export default function CryptoList() {
   const [filteredData, setFilteredData] = useState<Crypto[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currency, setCurrency] = useState("usd");
+  const [currencySymbol, setCurrencySymbol] = useState("$");
+  const totalPages = 8; 
 
-  const [currentPage, setCurrentPage] = useState(1); // Track the current page
-  const totalPages = 8; // Example: You might calculate this if needed
-  // Fetch data from API
   useEffect(() => {
     const fetchCoin = async () => {
       try {
@@ -30,10 +32,10 @@ export default function CryptoList() {
           "https://api.coingecko.com/api/v3/coins/markets",
           {
             params: {
-              vs_currency: "usd",
+              vs_currency: currency,
               order: "market_cap_desc",
-              page: currentPage, // Use currentPage for pagination
-              per_page: 10, // Optional: Limit items per page
+              page: currentPage,
+              per_page: 10,
             },
           }
         );
@@ -45,18 +47,57 @@ export default function CryptoList() {
         setLoading(false);
       }
     };
-    fetchCoin();
-  }, [currentPage]);
 
-  // Handle search functionality
+    fetchCoin();
+  }, [currentPage, currency]);
+
   useEffect(() => {
     const filteredCryptos = cryptoData.filter(
       (crypto) =>
         crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setFilteredData(filteredCryptos); // Update the filtered data when the search term changes
-  }, [searchTerm, cryptoData]); // Re-run the effect when searchTerm or cryptoData changes
+    setFilteredData(filteredCryptos);
+  }, [searchTerm, cryptoData]);
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const sortOption = e.target.value;
+    let sortedData = [...filteredData];
+
+    switch (sortOption) {
+      case "htol":
+        sortedData = sortedData.sort((a, b) => b.market_cap - a.market_cap);
+        break;
+      case "ltoh":
+        sortedData = sortedData.sort((a, b) => a.market_cap - b.market_cap);
+        break;
+      case "htolPrice":
+        sortedData = sortedData.sort((a, b) => b.current_price - a.current_price);
+        break;
+      case "ltohPrice":
+        sortedData = sortedData.sort((a, b) => a.current_price - b.current_price);
+        break;
+      default:
+        break;
+    }
+
+    setFilteredData(sortedData);
+  };
+
+  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCurrency = e.target.value;
+    setCurrency(selectedCurrency);
+
+    // Set the symbol based on the selected currency
+    const currencySymbols: { [key: string]: string } = {
+      usd: "$",
+      inr: "₹",
+      eur: "€",
+      gbp: "£",
+    };
+
+    setCurrencySymbol(currencySymbols[selectedCurrency] || "$");
+  };
 
   if (loading) {
     return (
@@ -99,23 +140,21 @@ export default function CryptoList() {
 
         {/* Search and Filters */}
         <div className="text-center text-white mt-6">
-          {/* Search Box */}
           <div className="flex justify-center mb-6">
             <input
               type="text"
               placeholder="Search for a cryptocurrency"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} // Update search term as user types
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="px-4 py-2 rounded-lg text-black dark:text-white border border-yellow-600 dark:border-yellow-400 w-full sm:w-80 md:w-96 focus:outline-none"
             />
           </div>
 
-          {/* Dropdowns */}
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8">
-            {/* Currency Dropdown */}
+          {/* Currency Dropdown */}
+          <div className="flex justify-center gap-4 sm:gap-6 mb-8">
             <select
               className="px-5 py-2 rounded-lg bg-white dark:bg-gray-800 dark:text-white text-black w-full sm:w-auto"
-              onChange={(e) => console.log(e.target.value)} // Handle currency logic here
+              onChange={handleCurrencyChange}
             >
               <option value="usd">USD</option>
               <option value="inr">INR</option>
@@ -123,24 +162,14 @@ export default function CryptoList() {
               <option value="gbp">GBP</option>
             </select>
 
-            {/* Market Cap Dropdown */}
             <select
               className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 dark:text-white text-black w-full sm:w-auto"
-              onChange={(e) => console.log(e.target.value)} // Handle sorting logic
+              onChange={handleSortChange}
             >
-              <option value="#">Market Cap</option>
-              <option value="htol">High to Low</option>
-              <option value="ltoh">Low to High</option>
-            </select>
-
-            {/* Price Dropdown */}
-            <select
-              className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 dark:text-white text-black w-full sm:w-auto"
-              onChange={(e) => console.log(e.target.value)} // Handle sorting logic
-            >
-              <option value="#">Price</option>
-              <option value="priceH">High to Low</option>
-              <option value="priceL">Low to High</option>
+              <option value="htol">Market Cap High to Low</option>
+              <option value="ltoh">Market Cap Low to High</option>
+              <option value="htolPrice">Price High to Low</option>
+              <option value="ltohPrice">Price Low to High</option>
             </select>
           </div>
         </div>
@@ -151,17 +180,14 @@ export default function CryptoList() {
             {filteredData.map((crypto) => (
               <CryptoCard
                 key={crypto.id}
-                removeFromFavorites={(id) =>
-                  console.log(`Removing favorite: ${id}`)
-                }
+                removeFromFavorites={(id) => console.log(`Removing favorite: ${id}`)}
                 id={crypto.id}
                 img={crypto.image}
                 name={crypto.name}
                 currentPrice={crypto.current_price}
                 symbol={crypto.symbol}
-                market_cap_change_percentage_24h={
-                  crypto.market_cap_change_percentage_24h
-                }
+                market_cap_change_percentage_24h={crypto.market_cap_change_percentage_24h}
+                currencySymbol={currencySymbol}  // Pass the currency symbol here
               />
             ))}
           </div>

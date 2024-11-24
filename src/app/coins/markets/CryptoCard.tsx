@@ -13,6 +13,7 @@ interface CryptoCardProps {
   symbol: string;
   market_cap_change_percentage_24h: number;
   removeFromFavorites: (id: string) => void;
+  currencySymbol: string;  // New prop for currency symbol
 }
 
 interface FavoriteCrypto {
@@ -32,6 +33,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
   symbol,
   market_cap_change_percentage_24h,
   removeFromFavorites,
+  currencySymbol,  // Receiving the currency symbol here
 }) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -101,7 +103,9 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
       <div className="p-4 flex justify-between">
         <div>
           <h1 className="text-yellow-600 dark:text-yellow-300">Price</h1>
-          <h1 className="font-bold text-yellow-700 dark:text-yellow-400">${currentPrice.toFixed(2)}</h1>
+          <h1 className="font-bold text-yellow-700 dark:text-yellow-400">
+            {currencySymbol}{currentPrice.toFixed(2)}
+          </h1>
         </div>
         <div>
           <h1 className="text-yellow-600 dark:text-yellow-300">24h Change</h1>

@@ -16,6 +16,7 @@ interface Exchange {
 
 const ExchangeList: React.FC = () => {
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
+  const [loading, setLoading] = useState(true); // Loading state
   
   // Pagination States
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,18 +28,14 @@ const ExchangeList: React.FC = () => {
       try {
         const response = await axios.get('https://api.coingecko.com/api/v3/exchanges');
         setExchanges(response.data);
+        setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error('Error fetching exchanges data:', error);
+        setLoading(false); // Set loading to false if there is an error
       }
     };
     fetchExchanges();
   }, []);
-
-  // Toggle favorites
- 
-
-  // Sort exchanges based on trade_volume_24h_btc
-  
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -53,46 +50,57 @@ const ExchangeList: React.FC = () => {
   // Calculate total pages
   const totalPages = Math.ceil(exchanges.length / itemsPerPage);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+        <div className="flex items-center gap-2">
+          <div
+            className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0s" }}
+          ></div>
+          <div
+            className="w-4 h-4 bg-green-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.1s" }}
+          ></div>
+          <div
+            className="w-4 h-4 bg-yellow-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
+          <div
+            className="w-4 h-4 bg-red-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.3s" }}
+          ></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-4 min-h-screen bg-[url('/explore.png')] bg-contain bg-fixed bg-no-repeat">
+      <div className='absolute backdrop-blur-md inset-0'></div>
+      <div className='relative'>
+        <h1 className="text-3xl sm:text-6xl mb-10 text-center font-bold text-yellow-400">
+          Crypto<span className="text-white"> Exchanges</span>
+        </h1>
 
-        <div className='absolute backdrop-blur-md inset-0'></div>
-        <div className='relative'>
-
-
-      <h1 className="text-3xl sm:text-6xl mb-10 text-center font-bold text-yellow-400">
-        Crypto<span className="text-white"> Exchanges</span>
-      </h1>
-
-      {/* Sorting Button */}
-      <div className="flex justify-center mb-4">
-        
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {currentExchanges.map((exchange) => {
-
-          return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {currentExchanges.map((exchange) => (
             <div
               key={exchange.id}
               className="max-w-[20rem] w-full border text-black rounded-xl overflow-hidden shadow-lg transform transition-all hover:scale-105 dark:bg-gray-800 dark:text-yellow-100 flex flex-col"
             >
               <div className="flex items-center p-4 space-x-4">
-                
-                  <div className="w-16 h-16 relative">
-                    <Image src={exchange.image} layout="fill" objectFit="contain" alt="crypto-image" />
-                  </div>
+                <div className="w-16 h-16 relative">
+                  <Image src={exchange.image} layout="fill" objectFit="contain" alt="crypto-image" />
+                </div>
 
-                  <div className="flex-1">
-                    <div className="flex justify-between items-center">
-                      <h2 className="lg:text-2xl text-lg font-bold text-yellow-700 dark:text-yellow-400">
-                        {exchange.name}
-                      </h2>
-                    </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center">
+                    <h2 className="lg:text-2xl text-lg font-bold text-yellow-700 dark:text-yellow-400">
+                      {exchange.name}
+                    </h2>
                   </div>
-                
-
-                
+                </div>
               </div>
 
               <div className="p-4 flex justify-between">
@@ -125,33 +133,32 @@ const ExchangeList: React.FC = () => {
                 </div>
               </div>
             </div>
-          );
-        })}
-      </div>
-
-      {/* Pagination Controls */}
-      <div className="flex justify-center mt-8">
-        <button
-          className="px-4 py-2 bg-gray-300 dark:bg-gray-600 dark:text-yellow-100 text-black rounded-l-lg hover:bg-gray-400 disabled:opacity-50"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-
-        <span className="px-4 py-2 text-xl text-black dark:text-yellow-100">
-          Page {currentPage} of {totalPages}
-        </span>
-
-        <button
-          className="px-4 py-2 bg-gray-300 dark:bg-gray-600 dark:text-yellow-100 text-black rounded-r-lg hover:bg-gray-400 disabled:opacity-50"
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
+          ))}
         </div>
+
+        {/* Pagination Controls */}
+        <div className="flex justify-center mt-8">
+          <button
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 dark:text-yellow-100 text-black rounded-l-lg hover:bg-gray-400 disabled:opacity-50"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          <span className="px-4 py-2 text-xl text-black dark:text-yellow-100">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 dark:text-yellow-100 text-black rounded-r-lg hover:bg-gray-400 disabled:opacity-50"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
