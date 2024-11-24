@@ -31,9 +31,12 @@ const HomeTile = () => {
         </span>{" "}
         {/* FlipWords animated from left */}
         <FlipWords words={words} className="flip-words text-white dark:text-white" /> <br />
+        <span className="text-white dark:text-white">
+
         Your Crypto{" "}
+        </span>
         {/* Journey animated from the right */}
-        <span className="journey-heading underline decoration-yellow-600 dark:decoration-yellow-400">
+        <span className="journey-heading text-white dark:text-white underline decoration-yellow-600 dark:decoration-yellow-400">
           Journey
         </span>
       </h1>
