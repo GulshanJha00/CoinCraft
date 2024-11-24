@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
+import Loading from '@/app/loading';
+import Pagination from '@/components/pagination';
 
 interface Exchange {
   id: string;
@@ -52,26 +54,7 @@ const ExchangeList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-        <div className="flex items-center gap-2">
-          <div
-            className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"
-            style={{ animationDelay: "0s" }}
-          ></div>
-          <div
-            className="w-4 h-4 bg-green-500 rounded-full animate-bounce"
-            style={{ animationDelay: "0.1s" }}
-          ></div>
-          <div
-            className="w-4 h-4 bg-yellow-500 rounded-full animate-bounce"
-            style={{ animationDelay: "0.2s" }}
-          ></div>
-          <div
-            className="w-4 h-4 bg-red-500 rounded-full animate-bounce"
-            style={{ animationDelay: "0.3s" }}
-          ></div>
-        </div>
-      </div>
+     <Loading/>
     );
   }
 
@@ -137,27 +120,11 @@ const ExchangeList: React.FC = () => {
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex justify-center mt-8">
-          <button
-            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 dark:text-yellow-100 text-black rounded-l-lg hover:bg-gray-400 disabled:opacity-50"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-
-          <span className="px-4 py-2 text-xl text-black dark:text-yellow-100">
-            Page {currentPage} of {totalPages}
-          </span>
-
-          <button
-            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 dark:text-yellow-100 text-black rounded-r-lg hover:bg-gray-400 disabled:opacity-50"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+         currentPage={currentPage} 
+         totalPages={totalPages} 
+         onPageChange={handlePageChange} 
+       />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import CryptoCard from "../../coins/markets/CryptoCard";
+import CryptoCard from "../../../components/Dashboard/CryptoCard";
 import Link from "next/link";
 import Image from "next/image";
 

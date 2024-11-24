@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect } from "react";
 import { FlipWords } from "./ui/flip-words";
 import gsap from "gsap";
@@ -8,17 +9,20 @@ const HomeTile = () => {
   useEffect(() => {
     const timeline = gsap.timeline();
 
-    timeline.from(".text-head",
-      { opacity: 0, y: -100 , duration: 1, overflow: "hidden"}, // Start from above
-    )
+    timeline.from(".text-head", {
+      opacity: 0,
+      y: -100,
+      duration: 1,
+      overflow: "hidden", // Start from above
+    });
   }, []);
 
   return (
-    <div className="home-tile">
+    <div className="home-tile ">
       <h1
-        className="text-head text-2xl text-gray-300 dark:text-white sm:text-3xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text mb-10"
+        className="text-head font-extrabold text-[1.5rem] sm:text-3xl md:text-4xl lg:text-6xl font-['Poppins'] bg-clip-text mb-6 text-center sm:text-left"
         style={{
-          textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)",
+          textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)", // Add shadow for extra effect
         }}
       >
         {/* CoinVerse: animated from bottom */}

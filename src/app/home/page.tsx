@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import CryptoList from '../coins/markets/CryptoCardProps'
+import CryptoList from '@/components/Dashboard/CryptoCardProps'
 
 const page = () => {
   return (

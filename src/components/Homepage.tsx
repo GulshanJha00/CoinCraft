@@ -30,15 +30,17 @@ const Homepage: React.FC = () => {
       <div>
       {/* Hero Section */}
       <section
-        className="h-screen bg-cover bg-center relative flex items-center justify-center text-gray-800 dark:text-white text-center"
+        className="h-screen bg-cover bg-center relative flex items-center justify-center text-gray-800 dark:text-white text-center "
         style={{
           backgroundImage: `url('/bg-homepage.jpg')`,
         }}
       >
         {/* Background */}
-        <div className="absolute backdrop-blur-[5px] inset-0  "></div>
+        <div className="absolute  md:backdrop-blur-[5px] inset-0 "></div>
 
-        <div className="relative z-10 max-w-4xl p-10 text-center">
+        <div className="relative z-10 max-w-4xl p-10 text-center  sm:bg-transparent">
+        
+
           <HomeTile/>
 
           <Carousel />

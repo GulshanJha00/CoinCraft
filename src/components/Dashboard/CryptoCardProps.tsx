@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import CryptoCard from "./CryptoCard";
 import axios from "axios";
+import Pagination from "../pagination";
 
 // Define the interface for a single crypto item
 interface Crypto {
@@ -194,26 +195,13 @@ export default function CryptoList() {
         </div>
       </div>
 
-      <div className="relative flex justify-center items-center mt-8">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
-        >
-          Previous
-        </button>
+      <div className="relative">
 
-        <span className="mx-4 text-white">
-          Page {currentPage} of {totalPages}
-        </span>
-
-        <button
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-yellow-600 text-white rounded-lg disabled:opacity-50"
-        >
-          Next
-        </button>
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onPageChange={(page) => setCurrentPage(page)} 
+      />
       </div>
     </div>
   );
