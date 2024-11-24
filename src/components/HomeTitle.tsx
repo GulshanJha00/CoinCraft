@@ -18,7 +18,7 @@ const HomeTile = () => {
   }, []);
 
   return (
-    <div className="home-tile ">
+    <div className="home-tile w-full flex justify-center items-center ">
       <h1
         className="text-head font-extrabold text-[1.5rem] sm:text-3xl md:text-4xl lg:text-6xl font-['Poppins'] bg-clip-text mb-6 text-center sm:text-left"
         style={{
