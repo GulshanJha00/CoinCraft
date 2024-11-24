@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Carousel from "../components/Carousel"; // Make sure to import your carousel component
+import HomeTile from "./HomeTitle";
 
 const Homepage: React.FC = () => {
   return (
@@ -16,20 +17,7 @@ const Homepage: React.FC = () => {
         <div className="absolute backdrop-blur-[5px] inset-0 bg-gray-400 dark:bg-black opacity-30 "></div>
 
         <div className="relative z-10 max-w-4xl p-10 text-center">
-          <h1
-            className="text-2xl text-gray-300 dark:text-white sm:text-3xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text mb-4 animate__animated animate__fadeInUp"
-            style={{
-              textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <span className="text-yellow-400 dark:text-yellow-400">
-              CryptoTrack:
-            </span>{" "}
-            Track Your Crypto{" "}
-            <span className="underline decoration-yellow-600 dark:decoration-yellow-400">
-              Journey
-            </span>
-          </h1>
+          <HomeTile/>
 
           {/* Carousel Component */}
           <Carousel />
