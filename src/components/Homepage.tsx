@@ -5,6 +5,7 @@ import Carousel from "../components/Carousel"; // Make sure to import your carou
 import HomeTile from "./HomeTitle";
 import { FollowerPointerCard } from "../components/ui/following-pointer";
 import gsap from "gsap"; // Don't forget to import GSAP
+import ChooseUs from "./ChooseUs";
 
 const Homepage: React.FC = () => {
   useEffect(() => {
@@ -64,32 +65,11 @@ const Homepage: React.FC = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-20 px-8 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white text-center transition-colors duration-500">
-        <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-6">
-          Why Choose{" "}
-          <span className="underline decoration-yellow-600 text-yellow-500 dark:decoration-yellow-400">
-            CryptoTrack?
-          </span>
-        </h2>
-        <p className="text-lg sm:text-base font-light mb-8 max-w-4xl mx-auto">
-          CryptoTrack is built for both{" "}
-          <span className="text-yellow-600 dark:text-yellow-400 font-bold">
-            beginners and professionals.
-          </span>{" "}
-          Experience{" "}
-          <span className="text-yellow-600 dark:text-yellow-400 font-bold">
-            lightning-fast updates, visualized market trends,
-          </span>{" "}
-          and the tools you need to stay{" "}
-          <span className="text-yellow-600 dark:text-yellow-400 font-bold">
-            ahead
-          </span>{" "}
-          in the game.
-        </p>
-        <button className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 dark:from-yellow-600 dark:via-yellow-700 dark:to-yellow-800 text-gray-800 dark:text-white rounded-xl shadow-2xl transition-transform duration-300 hover:scale-105 transform">
-          Explore Now
-        </button>
-      </section>
+      <div>
+      <ChooseUs/>
+
+      </div>
+
 
       {/* Footer */}
       <footer className="py-8 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white text-center transition-colors duration-500">
