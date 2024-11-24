@@ -4,7 +4,7 @@ import { FlipWords } from "./ui/flip-words";
 import gsap from "gsap";
 
 const HomeTile = () => {
-  const words = ["Track", "Precise", "Advanced", "Smart"];
+  const words = ["Track", "Precise", "Level", "Smart"];
 
   useEffect(() => {
     const timeline = gsap.timeline();
@@ -20,7 +20,7 @@ const HomeTile = () => {
   return (
     <div className="home-tile w-full flex justify-center items-center ">
       <h1
-        className="text-head font-extrabold text-[1.5rem] sm:text-3xl md:text-4xl lg:text-6xl font-['Poppins'] bg-clip-text mb-6 text-center sm:text-left"
+        className="text-head font-extrabold text-[2rem] sm:text-4xl md:text-4xl lg:text-6xl font-['Poppins'] bg-clip-text mb-6 text-center sm:text-left"
         style={{
           textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)", // Add shadow for extra effect
         }}

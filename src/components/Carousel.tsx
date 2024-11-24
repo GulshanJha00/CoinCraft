@@ -131,7 +131,7 @@ const Carousel: React.FC = () => {
 
   return (
     <div className="carousel h-56 px-1 md:px-8 flex items-center justify-center mt-5 mb-10">
-      <div className=" p-1 md:p-4 border rounded-3xl dark:bg-neutral-900 bg-neutral-100 border-neutral-200 dark:border-neutral-800 mx-auto w-full h-full">
+      <div className=" p-1 md:p-4 border rounded-3xl dark:bg-neutral-900 bg-neutral-100 border-neutral-200 dark:border-neutral-800 mx-auto lg:w-2/3 w-full  h-full">
         {data.length >= 2 ? (
           <Compare
             firstImage={

@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Meteors } from "@/components/meteors";
+import { BackgroundBeams } from "@/components/ui/background-beams";
 
 function AboutPage() {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -48,7 +50,9 @@ function AboutPage() {
   }, []); // Empty dependency array ensures the effect runs only once
 
   return (
-    <div className="relative min-h-screen p-10 overflow-hidden bg-gradient-to-r from-blue-700 via-purple-800 to-indigo-800">
+    <div className="relative min-h-screen p-10 overflow-hidden dark:bg-gradient-to-r dark:from-gray-200 dark:via-gray-500 dark:to-indigo-800 bg-gradient-to-r from-indigo-800 via-gray-500 to-gray-200">
+      <BackgroundBeams />
+      <Meteors number={40} />
       {/* Container */}
       <div className="max-w-6xl mx-auto flex flex-col items-center text-center space-y-10 relative z-10">
         {/* Title */}

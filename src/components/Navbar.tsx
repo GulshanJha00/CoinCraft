@@ -56,6 +56,7 @@ const Navbar: React.FC = () => {
           </button>
 
           {/* Mobile Hamburger Menu Button (Visible only below 'lg') */}
+          
           <button
             className={`lg:hidden ${textColor} text-3xl z-20`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -74,18 +75,18 @@ const Navbar: React.FC = () => {
             }`}
           >
             <nav className="flex flex-col items-center gap-4 text-xl">
-              <a href="#home" className={`${textColor}`}>
+              <Link href="/home" className={`${textColor}`}>
                 Home
-              </a>
-              <a href="#favorites" className={`${textColor}`}>
+              </Link>
+              <Link href="/home/favorites" className={`${textColor}`}>
                 Favorites
-              </a>
-              <a href="#exchanges" className={`${textColor}`}>
+              </Link>
+              <Link href="/home/exchanges" className={`${textColor}`}>
                 Exchanges
-              </a>
-              <a href="#about" className={`${textColor}`}>
+              </Link>
+              <Link href="/home/about" className={`${textColor}`}>
                 About
-              </a>
+              </Link>
             </nav>
           </div>
 
