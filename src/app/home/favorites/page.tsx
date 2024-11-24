@@ -38,7 +38,7 @@ export default function Favourites() {
 
   return (
     <div className="relative min-h-screen bg-[url('/fev2.png')] bg-cover bg-center bg-fixed">
-      <div className="absolute inset-0 backdrop-blur-sm  dark:bg-black bg-white dark:opacity-70 opacity-30"></div> {/* Softer opacity */}
+      <div className="absolute inset-0 backdrop-blur-sm dark:bg-black bg-white dark:opacity-70 opacity-30"></div> {/* Softer opacity */}
       
       <div className="relative min-h-screen px-4 sm:px-8 py-10 ">
         <div className="w-full flex justify-center items-center mb-6">
@@ -53,7 +53,7 @@ export default function Favourites() {
             {uniqueFavorites.length > 0 ? (
               uniqueFavorites.map((crypto) => (
                 <CryptoCard
-                  key={crypto.id}
+                  key={crypto.id} // Ensure that this is unique
                   id={crypto.id}
                   img={crypto.img}
                   name={crypto.name}
@@ -70,7 +70,7 @@ export default function Favourites() {
                   src={"/nofav.png"}
                   width={200}
                   height={200}
-                  alt="No favorites yet" 
+                  alt="No favorites yet"
                   className="w-48 mb-6 animate-pulse"
                 />
                 <p className="text-xl sm:text-2xl text-black dark:text-gray-300 mb-4">
@@ -80,9 +80,7 @@ export default function Favourites() {
                   Browse cryptos and tap the STAR to keep your top picks.
                 </p>
                 <Link href={"home"}>
-                  <button
-                    className="bg-yellow-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-yellow-400 transition-all"
-                  >
+                  <button className="bg-yellow-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-yellow-400 transition-all">
                     Start Browsing
                   </button>
                 </Link>
