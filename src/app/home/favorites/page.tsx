@@ -12,6 +12,8 @@ interface FavoriteCrypto {
   symbol: string;
   market_cap_change_percentage_24h: number;
 }
+const currencySymbol = "$";
+
 
 export default function Favourites() {
   const [favorites, setFavorites] = useState<FavoriteCrypto[]>([]); // Typed state
@@ -53,6 +55,7 @@ export default function Favourites() {
             {uniqueFavorites.length > 0 ? (
               uniqueFavorites.map((crypto) => (
                 <CryptoCard
+                currencySymbol = {currencySymbol}
                   key={crypto.id} // Ensure that this is unique
                   id={crypto.id}
                   img={crypto.img}
