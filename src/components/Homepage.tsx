@@ -1,11 +1,32 @@
-import React from "react";
+'use client'
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Carousel from "../components/Carousel"; // Make sure to import your carousel component
 import HomeTile from "./HomeTitle";
+import { FollowerPointerCard } from "../components/ui/following-pointer";
+import gsap from "gsap"; // Don't forget to import GSAP
 
 const Homepage: React.FC = () => {
+  useEffect(() => {
+    // GSAP animation for the .para class
+    gsap.fromTo(
+      ".para", // Target the para class
+      {
+        opacity: 0, // Start with zero opacity
+        y: 50, // Start from a slight vertical offset
+      },
+      {
+        opacity: 1, // Fade in
+        y: 0, // End at the original position
+        duration: 1.5, // Animation duration
+        ease: "power3.out", // Ease for a smooth effect
+      }
+    );
+  }, []); // Empty dependency array ensures this runs once after the component mounts
+
   return (
-    <div>
+    <FollowerPointerCard>
+      <div>
       {/* Hero Section */}
       <section
         className="h-screen bg-cover bg-center relative flex items-center justify-center text-gray-800 dark:text-white text-center"
@@ -14,16 +35,15 @@ const Homepage: React.FC = () => {
         }}
       >
         {/* Background */}
-        <div className="absolute backdrop-blur-[5px] inset-0 bg-gray-400 dark:bg-black opacity-30 "></div>
+        <div className="absolute backdrop-blur-[5px] inset-0  "></div>
 
         <div className="relative z-10 max-w-4xl p-10 text-center">
           <HomeTile/>
 
-          {/* Carousel Component */}
           <Carousel />
 
           <p
-            className="text-xl sm:text-lg mb-8 max-w-full mx-auto font-bold text-yellow-600 dark:text-yellow-200 bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-50 p-4 rounded-lg shadow-lg"
+            className="para text-xl sm:text-lg mb-8 max-w-full mx-auto font-bold text-yellow-600 dark:text-yellow-200 bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-50 p-4 rounded-lg shadow-lg"
             style={{
               textShadow: "1px 1px 1px rgba(0, 0, 0, 0.5)",
             }}
@@ -82,6 +102,7 @@ const Homepage: React.FC = () => {
         </p>
       </footer>
     </div>
+    </FollowerPointerCard>
   );
 };
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { Compare } from "@/components/ui/compare"; // Adjust import according to your file structure
-
+import gsap from "gsap";
 // Define the type for the CryptoCard props
 interface CryptoCardProps {
   id: string;
@@ -32,7 +32,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
 
   return (
     <div
-      className={`w-full h-full border text-black rounded-xl overflow-hidden shadow-lg transform transition-all hover:scale-105 dark:bg-gray-800 dark:text-yellow-100 flex flex-col ${priceChangeStyle} p-4`}
+      className={` w-full h-full border text-black rounded-xl overflow-hidden shadow-lg transform transition-all hover:scale-105 dark:bg-gray-800 dark:text-yellow-100 flex flex-col ${priceChangeStyle} p-4`}
     >
       {/* Header Section */}
       <div className="flex items-center justify-between space-x-4">
@@ -115,11 +115,23 @@ const Carousel: React.FC = () => {
     };
 
     fetchApi();
+
+    const timeline = gsap.timeline();
+
+    timeline.from(".carousel",
+      {
+        opacity: 0,
+        y: -100,
+        overflow: "hidden",
+        duration: 1.2,
+      }
+    )
+   
   }, []);
 
   return (
-    <div className="w-full h-56 px-1 md:px-8 flex items-center justify-center">
-      <div className="p-1 md:p-4 border rounded-3xl dark:bg-neutral-900 bg-neutral-100 border-neutral-200 dark:border-neutral-800 mx-auto w-2/3 h-full">
+    <div className="carousel w-full h-56 px-1 md:px-8 flex items-center justify-center mt-5 mb-10">
+      <div className=" p-1 md:p-4 border rounded-3xl dark:bg-neutral-900 bg-neutral-100 border-neutral-200 dark:border-neutral-800 mx-auto w-2/3 h-full">
         {data.length >= 2 ? (
           <Compare
             firstImage={
