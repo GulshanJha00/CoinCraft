@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import Loading from "./loading";
 import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
+import Footer from "@/components/Footer";
 
 
 const geistSans = localFont({
@@ -50,6 +51,7 @@ export default function RootLayout({
           >
               <Navbar />
               {children}
+              <Footer/>
           </ThemeProvider>
         </Suspense>
       </body>
