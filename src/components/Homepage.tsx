@@ -31,7 +31,7 @@ const Homepage: React.FC = () => {
           <div className="absolute inset-0 backdrop-blur-[5px]"></div>
 
           <div>
-            <TextSection/>
+            <TextSection />
           </div>
         </section>
 
@@ -43,12 +43,10 @@ const Homepage: React.FC = () => {
           <HeroParallaxDemo />
         </div>
 
-        {/* Footer */}
-        
 
-        
+
         <div>
-        <BottomNavigation />
+          <BottomNavigation />
         </div>
       </div>
     </FollowerPointerCard>

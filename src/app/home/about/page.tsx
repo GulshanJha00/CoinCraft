@@ -4,6 +4,8 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Meteors } from "@/components/meteors";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import Button from "@/components/Button";
+import Link from "next/link";
 
 function AboutPage() {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -105,12 +107,9 @@ function AboutPage() {
         </div>
 
         {/* Call to Action */}
-        <button
-          ref={buttonRef}
-          className="mt-10 px-6 py-3 bg-yellow-500 text-white font-semibold rounded-lg shadow-lg hover:bg-orange-500 transform hover:scale-105 transition-all duration-300"
-        >
-          Explore Features
-        </button>
+        <Link href="/home">
+                <Button text="Start Tracking" />
+        </Link>
       </div>
     </div>
   );
