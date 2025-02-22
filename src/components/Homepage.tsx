@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect } from 'react';
-import { FollowerPointerCard } from '../components/ui/following-pointer';
 import gsap from 'gsap'; // Import GSAP
 import ChooseUs from './ChooseUs';
 import { HeroParallaxDemo } from './HeroParallaxCard';
@@ -18,7 +17,6 @@ const Homepage: React.FC = () => {
   }, []);
 
   return (
-    <FollowerPointerCard>
       <div className="flex flex-col min-h-screen">
         {/* Hero Section */}
         <section
@@ -49,7 +47,6 @@ const Homepage: React.FC = () => {
           <BottomNavigation />
         </div>
       </div>
-    </FollowerPointerCard>
   );
 };
 

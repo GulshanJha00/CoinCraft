@@ -60,7 +60,7 @@ export default function CryptoList() {
     );
     setFilteredData(filteredCryptos);
   }, [searchTerm, cryptoData]);
-
+  
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const sortOption = e.target.value;
     let sortedData = [...filteredData];

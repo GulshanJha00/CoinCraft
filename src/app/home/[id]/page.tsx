@@ -3,6 +3,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
 import { Line, PolarArea, Pie } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
   LineElement,
@@ -57,6 +58,8 @@ interface ChartData {
   }[];
 }
 let imagge = "";
+
+
 const fetchCryptoDetails = async (
   id: string
 ): Promise<CryptoDetails | null> => {
@@ -101,6 +104,7 @@ const fetchCryptoAnalysis = async (id: string): Promise<PriceData[]> => {
     return [];
   }
 };
+
 
 const CryptoDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

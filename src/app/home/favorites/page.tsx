@@ -16,6 +16,7 @@ const currencySymbol = "$";
 
 
 export default function Favourites() {
+  
   const [favorites, setFavorites] = useState<FavoriteCrypto[]>([]); // Typed state
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function Favourites() {
 
   const removeFromFavorites = (id: string) => {
     // Remove the selected crypto from the favorites list
+    
     const updatedFavorites = favorites.filter((crypto) => crypto.id !== id);
     setFavorites(updatedFavorites); // Update local state
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Persist changes in localStorage

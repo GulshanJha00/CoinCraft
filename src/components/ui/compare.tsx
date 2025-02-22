@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { SparklesCore } from "../ui/sparkles";
+import { SparklesCore } from "@/components/ui/sparkles";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { IconDotsVertical } from "@tabler/icons-react";
 
 interface CompareProps {
-  firstImage?: React.ReactNode;
-  secondImage?: React.ReactNode;
+  firstImage?: string;
+  secondImage?: string;
   className?: string;
   firstImageClassName?: string;
   secondImageClassname?: string;
@@ -16,7 +17,6 @@ interface CompareProps {
   autoplay?: boolean;
   autoplayDuration?: number;
 }
-
 export const Compare = ({
   firstImage = "",
   secondImage = "",
@@ -33,6 +33,10 @@ export const Compare = ({
   const [isDragging, setIsDragging] = useState(false);
 
   const sliderRef = useRef<HTMLDivElement>(null);
+
+  const [isMouseOver, setIsMouseOver] = useState(false);
+
+  console.log(isMouseOver)
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
   const startAutoplay = useCallback(() => {
@@ -64,11 +68,32 @@ export const Compare = ({
     return () => stopAutoplay();
   }, [startAutoplay, stopAutoplay]);
 
-  const handleStart = useCallback(() => {
-    if (slideMode === "drag") {
-      setIsDragging(true);
+  function mouseEnterHandler() {
+    setIsMouseOver(true);
+    stopAutoplay();
+  }
+
+  function mouseLeaveHandler() {
+    setIsMouseOver(false);
+    if (slideMode === "hover") {
+      setSliderXPercent(initialSliderPercentage);
     }
-  }, [slideMode]);
+    if (slideMode === "drag") {
+      setIsDragging(false);
+    }
+    startAutoplay();
+  }
+
+  const handleStart = useCallback(
+    (clientX: number) => {
+      if (slideMode === "drag") {
+        setIsDragging(true);
+        console.log(clientX)
+      }
+    },
+    [slideMode]
+    
+  );
 
   const handleEnd = useCallback(() => {
     if (slideMode === "drag") {
@@ -92,28 +117,19 @@ export const Compare = ({
   );
 
   const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      handleStart()
-      console.log(e)
-    },
-    
+    (e: React.MouseEvent) => handleStart(e.clientX),
     [handleStart]
   );
-
   const handleMouseUp = useCallback(() => handleEnd(), [handleEnd]);
   const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {handleMove(e.clientX)
-      console.log(e)
-
-    },
+    (e: React.MouseEvent) => handleMove(e.clientX),
     [handleMove]
   );
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
       if (!autoplay) {
-        handleStart();
-        console.log(e)
+        handleStart(e.touches[0].clientX);
       }
     },
     [handleStart, autoplay]
@@ -143,6 +159,8 @@ export const Compare = ({
         cursor: slideMode === "drag" ? "grab" : "col-resize",
       }}
       onMouseMove={handleMouseMove}
+      onMouseLeave={mouseLeaveHandler}
+      onMouseEnter={mouseEnterHandler}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchStart={handleTouchStart}
@@ -172,13 +190,12 @@ export const Compare = ({
             />
           </div>
           {showHandlebar && (
-            <div className="h-5 w-5 rounded-md top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
-              <button className="text-black p-2">{`<>`}</button>
+            <div className="h-5 w-5 rounded-md top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute   flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
+              <IconDotsVertical className="h-4 w-4 text-black" />
             </div>
           )}
         </motion.div>
       </AnimatePresence>
-
       <div className="overflow-hidden w-full h-full relative z-20 pointer-events-none">
         <AnimatePresence initial={false}>
           {firstImage ? (
@@ -192,7 +209,15 @@ export const Compare = ({
               }}
               transition={{ duration: 0 }}
             >
-              {firstImage}
+              <img
+                alt="first image"
+                src={firstImage}
+                className={cn(
+                  "absolute inset-0  z-20 rounded-2xl flex-shrink-0 w-full h-full select-none",
+                  firstImageClassName
+                )}
+                draggable={false}
+              />
             </motion.div>
           ) : null}
         </AnimatePresence>
@@ -200,14 +225,15 @@ export const Compare = ({
 
       <AnimatePresence initial={false}>
         {secondImage ? (
-          <motion.div
+          <motion.img
             className={cn(
-              "absolute top-0 left-0 z-[19] rounded-2xl w-full h-full select-none",
+              "absolute top-0 left-0 z-[19]  rounded-2xl w-full h-full select-none",
               secondImageClassname
             )}
-          >
-            {secondImage}
-          </motion.div>
+            alt="second image"
+            src={secondImage}
+            draggable={false}
+          />
         ) : null}
       </AnimatePresence>
     </div>

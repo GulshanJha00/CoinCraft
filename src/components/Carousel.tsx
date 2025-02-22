@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,6 +34,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
     <div
       className={` w-full h-full border text-black rounded-xl overflow-hidden shadow-lg transform transition-all hover:scale-105 dark:bg-gray-800 dark:text-yellow-100 flex flex-col ${priceChangeStyle} p-4`}
     >
+      
       {/* Header Section */}
       <div className="flex items-center justify-between space-x-4">
         <Link href={`/home/${id}`} className="flex items-center space-x-4 w-full">
@@ -79,19 +80,9 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
   );
 };
 
-
-// Define the type for the data array
-interface CryptoData {
-  id: string;
-  image: string;
-  name: string;
-  current_price: number;
-  symbol: string;
-  market_cap_change_percentage_24h: number;
-}
+console.log(CryptoCard)
 
 const Carousel: React.FC = () => {
-  const [data, setData] = useState<CryptoData[]>([]); // Initialize with proper type
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -108,7 +99,7 @@ const Carousel: React.FC = () => {
             },
           }
         );
-        setData(response.data);
+        console.log(response)
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -132,39 +123,17 @@ const Carousel: React.FC = () => {
   return (
     <div className="carousel h-56 px-1 md:px-8 flex items-center justify-center mt-5 mb-10">
       <div className=" p-1 md:p-4 border rounded-3xl dark:bg-neutral-900 bg-neutral-100 border-neutral-200 dark:border-neutral-800 mx-auto lg:w-2/3 w-full  h-full">
-        {data.length >= 2 ? (
+          
           <Compare
-            firstImage={
-              <CryptoCard
-                id={data[0].id}
-                img={data[0].image}
-                name={data[0].name}
-                currentPrice={data[0].current_price}
-                symbol={data[0].symbol}
-                market_cap_change_percentage_24h={data[0].market_cap_change_percentage_24h}
-                removeFromFavorites={() => console.log("Remove feature here")}
-                currencySymbol="$"
-              />
-            }
-            secondImage={
-              <CryptoCard
-                id={data[1].id}
-                img={data[1].image}
-                name={data[1].name}
-                currentPrice={data[1].current_price}
-                symbol={data[1].symbol}
-                market_cap_change_percentage_24h={data[1].market_cap_change_percentage_24h}
-                removeFromFavorites={() => console.log("Remove feature here")}
-                currencySymbol="$"
-              />
-            }
+            firstImage="/bitcoincomp.png"
+            secondImage="/ethucomp.png"
+            firstImageClassName="object-fit"
+            secondImageClassname="object-fit"
             className="w-full h-full rounded-[22px] md:rounded-lg"
             slideMode="hover"
             autoplay={true}
           />
-        ) : (
-          <p className="text-center text-gray-500">Loading data...</p>
-        )}
+          
       </div>
     </div>
   );
