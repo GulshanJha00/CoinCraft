@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
   Chart as ChartJS,
@@ -33,8 +34,9 @@ ChartJS.register(
   Title
 );
 
-export default function CryptoDashboard({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function CryptoDashboard() {
+  const pathname = usePathname();
+const id = pathname.split("/").pop();
   const [cryptoDetails, setCryptoDetails] = useState<any>(null);
   const [chartData, setChartData] = useState<any>(null);
 
