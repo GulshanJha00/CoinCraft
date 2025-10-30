@@ -1,128 +1,124 @@
 "use client";
-import { useParams } from "next/navigation";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Line, PolarArea, Pie } from "react-chartjs-2";
-
 import {
   Chart as ChartJS,
-  LineElement,
-  PointElement,
-  LinearScale,
   CategoryScale,
-  Title,
-  Tooltip,
-  Legend,
-  RadialLinearScale,
+  LinearScale,
+  BarElement,
+  LineElement,
   ArcElement,
-} from "chart.js";
-import { useEffect, useState } from "react";
-
-// Register Chart.js components
-ChartJS.register(
-  LineElement,
   PointElement,
-  LinearScale,
-  CategoryScale,
-  Title,
   Tooltip,
   Legend,
-  RadialLinearScale,
-  ArcElement
+  Title,
+} from "chart.js";
+import {
+  Line,
+  Bar,
+  Pie,
+  Doughnut,
+  Scatter,
+} from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  ArcElement,
+  PointElement,
+  Tooltip,
+  Legend,
+  Title
 );
 
-interface CryptoDetails {
-  name: string;
-  symbol: string;
-  marketRank: number;
-  img: string;
-  marketCap: number;
-  priceChange24h: number | { usd: number };
-  price24hHigh: number | { usd: number }; // Update to handle both `number` and `{ usd: number }`
-  price24hLow: number | { usd: number }; // Do the same for price24hLow if needed
-}
+export default function CryptoDashboard({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const [cryptoDetails, setCryptoDetails] = useState<any>(null);
+  const [chartData, setChartData] = useState<any>(null);
 
-interface PriceData {
-  date: string;
-  price: number;
-}
+  // Fetch live data from CoinGecko
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const detailsRes = await fetch(
+          `https://api.coingecko.com/api/v3/coins/${id}`
+        );
+        const details = await detailsRes.json();
 
-interface ChartData {
-  labels: string[];
-  datasets: {
-    label: string;
-    data: number[];
-    borderColor: string;
-    backgroundColor: string;
-    fill: boolean;
-  }[];
-}
-let imagge = "";
+        const chartRes = await fetch(
+          `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=30`
+        );
+        const chart = await chartRes.json();
 
+        setCryptoDetails({
+          name: details.name,
+          symbol: details.symbol,
+          img: details.image.large,
+          marketRank: details.market_cap_rank,
+          marketCap: details.market_data.market_cap.usd,
+          price24hHigh: details.market_data.high_24h.usd,
+          price24hLow: details.market_data.low_24h.usd,
+          priceChange24h: details.market_data.price_change_percentage_24h,
+        });
 
-const fetchCryptoDetails = async (
-  id: string
-): Promise<CryptoDetails | null> => {
-  try {
-    const response = await axios.get(
-      `https://api.coingecko.com/api/v3/coins/${id}`
-    );
-    const { name, symbol, market_data } = response.data;
-    imagge = response.data.image.large;
-
-    return {
-      name,
-      symbol,
-      img: imagge,
-      marketRank: market_data.market_cap_rank,
-      marketCap: market_data.market_cap.usd,
-      priceChange24h: market_data.price_change_percentage_24h,
-      price24hHigh: market_data.high_24h,
-      price24hLow: market_data.low_24h,
-    };
-  } catch (error) {
-    console.error(`Error fetching details for coin ID: ${id}`, error);
-    return null;
-  }
-};
-
-const fetchCryptoAnalysis = async (id: string): Promise<PriceData[]> => {
-  try {
-    const response = await axios.get(
-      `https://api.coingecko.com/api/v3/coins/${id}/market_chart`,
-      {
-        params: { vs_currency: "usd", days: "30" },
+        setChartData({
+          labels: chart.prices.map((p: any) =>
+            new Date(p[0]).toLocaleDateString()
+          ),
+          datasets: [
+            {
+              label: `${details.name} Price (USD)`,
+              data: chart.prices.map((p: any) => p[1]),
+              borderColor: "#4BC0C0",
+              fill: true,
+              backgroundColor: "rgba(75,192,192,0.2)",
+              tension: 0.4,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    );
+    };
+    fetchData();
+  }, [id]);
 
-    return response.data.prices.map(([timestamp, price]: [number, number]) => ({
-      date: new Date(timestamp).toLocaleDateString("en-US"),
-      price,
-    }));
-  } catch (error) {
-    console.error(`Error fetching analysis data for coin ID: ${id}`, error);
-    return [];
-  }
-};
-
-
-const CryptoDetailsPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const [cryptoDetails, setCryptoDetails] = useState<CryptoDetails | null>(
-    null
-  );
-  const [chartData, setChartData] = useState<ChartData | null>(null);
-
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  
-
-  const polarAreaData = {
-    labels: ["Bitcoin", "Ethereum", "Cardano", "Binance Coin", "Solana"],
+  // Static dummy charts
+  const lineData = {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [
       {
-        label: "Market Share (%)",
-        data: [40, 25, 15, 10, 10],
+        label: "Bitcoin Price (USD)",
+        data: [67000, 67500, 68000, 69000, 68500, 70000, 71000],
+        borderColor: "#4BC0C0",
+        tension: 0.4,
+        fill: true,
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+      },
+    ],
+  };
+
+  const barData = {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      {
+        label: "Trading Volume (in B USD)",
+        data: [45, 55, 40, 65, 50, 70, 60],
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgba(255,99,132,1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const pieData = {
+    labels: ["Bitcoin", "Ethereum", "Tether", "BNB", "Solana"],
+    datasets: [
+      {
+        label: "Market Share",
+        data: [48, 25, 10, 9, 8],
         backgroundColor: [
           "#FF6384",
           "#36A2EB",
@@ -130,230 +126,164 @@ const CryptoDetailsPage: React.FC = () => {
           "#4BC0C0",
           "#9966FF",
         ],
-        borderWidth: 1,
+        hoverOffset: 10,
       },
     ],
   };
 
-  const pieChartData = {
-    labels: ["Mining", "Staking", "Trading", "Investing"],
+  const histData = {
+    labels: ["60k–62k", "62k–64k", "64k–66k", "66k–68k", "68k–70k"],
     datasets: [
       {
-        label: "User Activities",
-        data: [30, 20, 25, 25],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
-        borderWidth: 1,
+        label: "Price Occurrence",
+        data: [5, 10, 15, 7, 4],
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
       },
     ],
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      if (!id) return;
+  const scatterData = {
+    datasets: [
+      {
+        label: "BTC vs ETH Price",
+        data: [
+          { x: 67000, y: 3500 },
+          { x: 68000, y: 3550 },
+          { x: 69000, y: 3650 },
+          { x: 70000, y: 3750 },
+          { x: 71000, y: 3850 },
+        ],
+        backgroundColor: "#FF6384",
+      },
+    ],
+  };
 
-      try {
-        setLoading(true);
-        setError(null);
-
-        const [details, analysisData] = await Promise.all([
-          fetchCryptoDetails(id),
-          fetchCryptoAnalysis(id),
-        ]);
-
-        if (!details || analysisData.length === 0) {
-          setError("Failed to load cryptocurrency details or analysis data.");
-          setCryptoDetails(null);
-          setChartData(null);
-          return;
-        }
-
-        setCryptoDetails(details);
-
-        const labels = analysisData.map((entry) => entry.date);
-        const prices = analysisData.map((entry) => entry.price);
-
-        setChartData({
-          labels,
-          datasets: [
-            {
-              label: "Price (USD)",
-              data: prices,
-              borderColor: "rgba(255, 215, 0, 1)",
-              backgroundColor: "rgba(255, 215, 0, 0.2)",
-              fill: true,
-            },
-          ],
-        });
-      } catch (error) {
-        setError("An error occurred while fetching data.");
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [id]);
-
-  if (loading) return
-    (
-        <div className="flex items-center justify-center h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-        <div className="w-4 h-4 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-        <div className="w-4 h-4 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-        <div className="w-4 h-4 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
-      </div>
-    </div>
-    )
-  ;
-  if (error) return <p>Error: {error}</p>;
+  const circleData = {
+    labels: ["BTC", "ETH", "BNB", "SOL", "USDT"],
+    datasets: [
+      {
+        data: [50, 25, 10, 10, 5],
+        backgroundColor: [
+          "#36A2EB",
+          "#FF6384",
+          "#FFCE56",
+          "#9966FF",
+          "#4BC0C0",
+        ],
+      },
+    ],
+  };
 
   return (
-    <div className="p-5 font-sans bg-gray-100 dark:bg-gray-900 rounded-lg">
-      <div className="p-6 font-sans bg-gray-100 dark:bg-gray-900 rounded-xl shadow-lg transition-all duration-300">
-        <div className="bg-yellow-100 dark:bg-yellow-900 rounded-xl shadow-lg">
-          {cryptoDetails && (
-            <div className="bg-white dark:bg-yellow-800 p-8 rounded-2xl shadow-lg flex flex-col md:flex-row md:space-x-12 mb-6">
-              {/* Left Section: Image & Title */}
-              <div className="flex justify-center sm:w-full items-center mb-6 md:mb-0 lg:w-32 h-32 md:w-40 md:h-40">
-                <Image
-                  src={cryptoDetails.img}
-                  width={100}
-                  height={100}
-                  alt={cryptoDetails.name}
-                  className="rounded-full shadow-lg"
-                />
-              </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6">
+      <h1 className="text-3xl font-bold mb-8 text-center">
+        Crypto Analytics Dashboard
+      </h1>
 
-              {/* Right Section: Details */}
-              <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
-                <h1 className="text-2xl md:text-4xl font-extrabold text-yellow-600 dark:text-yellow-300 transition-colors duration-300">
-                  {cryptoDetails.name} ({cryptoDetails.symbol.toUpperCase()})
-                </h1>
-                <p className="text-md md:text-xl font-semibold text-gray-800 dark:text-gray-200">
-                  Market Rank: {cryptoDetails.marketRank.toLocaleString()}
-                </p>
-                <p className="text-md md:text-xl text-gray-800 dark:text-gray-200">
-                  Market Cap: ${cryptoDetails.marketCap.toLocaleString()}
-                </p>
-                <p className="text-md md:text-xl text-gray-800 dark:text-gray-200">
-                  24h High: $
-                  {typeof cryptoDetails.price24hHigh === "object"
-                    ? cryptoDetails.price24hHigh?.usd.toLocaleString()
-                    : cryptoDetails.price24hHigh?.toLocaleString() ?? "N/A"}
-                </p>
-                <p className="text-md md:text-xl text-gray-800 dark:text-gray-200">
-                  24h Low: $
-                  {typeof cryptoDetails.price24hLow === "object"
-                    ? cryptoDetails.price24hLow?.usd.toLocaleString()
-                    : cryptoDetails.price24hLow?.toLocaleString() ?? "N/A"}
-                </p>
-                <p className="text-md md:text-xl font-semibold text-gray-800 dark:text-gray-200">
-                  24h Price Change:{" "}
-                  {typeof cryptoDetails.priceChange24h === "object"
-                    ? cryptoDetails.priceChange24h?.usd.toLocaleString()
-                    : cryptoDetails.priceChange24h.toLocaleString() ??
-                      "N/A"}{" "}
-                  %
-                </p>
-              </div>
+      {/* Crypto Info Section */}
+      {cryptoDetails && (
+        <div className="p-6 bg-yellow-100 dark:bg-yellow-900 rounded-xl shadow-lg mb-6">
+          <div className="bg-white dark:bg-yellow-800 p-8 rounded-2xl shadow-lg flex flex-col md:flex-row md:space-x-12">
+            <div className="flex justify-center items-center mb-6 md:mb-0 lg:w-32 h-32 md:w-40 md:h-40">
+              <Image
+                src={cryptoDetails.img}
+                width={100}
+                height={100}
+                alt={cryptoDetails.name}
+                className="rounded-full shadow-lg"
+              />
             </div>
-          )}
-        </div>
-      </div>
 
-      <div className="bg-white dark:bg-gray-400 h-[40vh] sm:h-[60vh] lg:h-[90vh] p-5 rounded-lg shadow-md mb-5">
-        {/* Line Chart */}
-        {chartData && (
+            <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
+              <h1 className="text-3xl font-extrabold text-yellow-600 dark:text-yellow-300">
+                {cryptoDetails.name} ({cryptoDetails.symbol.toUpperCase()})
+              </h1>
+              <p>Market Rank: {cryptoDetails.marketRank}</p>
+              <p>Market Cap: ${cryptoDetails.marketCap.toLocaleString()}</p>
+              <p>24h High: ${cryptoDetails.price24hHigh.toLocaleString()}</p>
+              <p>24h Low: ${cryptoDetails.price24hLow.toLocaleString()}</p>
+              <p>
+                24h Change:{" "}
+                <span
+                  className={
+                    cryptoDetails.priceChange24h > 0
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }
+                >
+                  {cryptoDetails.priceChange24h.toFixed(2)}%
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dynamic Price Trend */}
+      <div className="bg-white dark:bg-gray-800 h-[50vh] p-5 rounded-lg shadow-md mb-8">
+        {chartData ? (
           <Line
             data={chartData}
-            height={300} // Set fixed height for small screens
-            width={600} // Set width (optional based on your layout)
             options={{
               responsive: true,
-              maintainAspectRatio: false, // Allow the chart to fill the available space
-              animation: {
-                duration: 2000,
-                easing: "easeInOutQuad",
-              },
+              maintainAspectRatio: false,
+              animation: { duration: 2000 },
               plugins: {
-                legend: {
-                  position: "top",
-                  labels: {
-                    font: {
-                      size: 14,
-                      weight: "bold",
-                      family: "Arial, sans-serif",
-                    },
-                    color: "#333",
-                  },
-                },
+                legend: { position: "top" },
                 title: {
                   display: true,
                   text: `Price Trend for ${id?.toUpperCase()} (Last 30 Days)`,
-                  font: {
-                    size: 18,
-                    family: "Arial, sans-serif",
-                  },
-                  color: "#333",
-                },
-              },
-              scales: {
-                x: {
-                  ticks: {
-                    color: "#888",
-                  },
-                },
-                y: {
-                  ticks: {
-                    color: "#888",
-                  },
                 },
               },
             }}
           />
+        ) : (
+          <p className="text-center text-gray-500">Loading chart...</p>
         )}
       </div>
 
-      {/* Responsive layout for charts */}
-      <div className="flex flex-col sm:grid sm:grid-cols-2 gap-5">
-        {/* Polar Area Chart */}
-        <div className="bg-white dark:bg-gray-400 p-5 rounded-lg shadow-md w-full h-[300px] sm:h-auto border border-red-500">
-          <h2 className="text-center font-bold text-lg mb-3">Market Share</h2>
-          <PolarArea
-            data={polarAreaData}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: "right",
-                },
-              },
-            }}
-          />
-        </div>
+      {/* 6 Chart Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ChartCard title="Bitcoin Price Trend">
+          <Line data={lineData} />
+        </ChartCard>
 
-        {/* Pie Chart */}
-        <div className="bg-white dark:bg-gray-400 p-5 rounded-lg shadow-md w-full h-[300px] sm:h-auto border border-blue-500">
-          <h2 className="text-center font-bold text-lg mb-3">
-            User Activities
-          </h2>
-          <Pie
-            data={pieChartData}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: "right",
-                },
-              },
-            }}
-          />
-        </div>
+        <ChartCard title="Weekly Trading Volume">
+          <Bar data={barData} />
+        </ChartCard>
+
+        <ChartCard title="Market Share">
+          <Pie data={pieData} />
+        </ChartCard>
+
+        <ChartCard title="Price Distribution">
+          <Bar data={histData} />
+        </ChartCard>
+
+        <ChartCard title="BTC vs ETH Correlation">
+          <Scatter data={scatterData} />
+        </ChartCard>
+
+        <ChartCard title="Portfolio Distribution">
+          <Doughnut data={circleData} />
+        </ChartCard>
       </div>
     </div>
   );
-};
+}
 
-export default CryptoDetailsPage;
+// Small helper component for each chart card
+function ChartCard({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-center mb-2">{title}</h2>
+      {children}
+    </div>
+  );
+}
