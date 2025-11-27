@@ -209,9 +209,17 @@ export default function CryptoDashboardBeforeAfter() {
           ],
         });
 
+        console.log("=== BEFORE CLEANING (RAW 30 DAYS) ===");
+console.log("Raw Prices:", rawPrices);
+console.log("Raw Volumes:", rawVolumes);
+console.log("Raw Market Caps:", rawMarketCaps);
+
+
         // ----------------
         // CLEANING (for the 30-day used by other AFTER charts)
         // ----------------
+
+        //removing all -ve values 
         let cleanPrices = rawPrices.filter((p: any) => typeof p.price === "number" && p.price > 0);
 
         // dedupe by date
@@ -356,6 +364,12 @@ export default function CryptoDashboardBeforeAfter() {
             },
           ],
         });
+
+        console.log("=== AFTER CLEANING (CLEANED 30 DAYS) ===");
+console.log("Cleaned Prices:", alignedPrices);
+console.log("Cleaned Volumes:", alignedVolumes);
+console.log("Cleaned Market Caps:", alignedCaps);
+
       } catch (err) {
         console.error("initial fetch error:", err);
       }
