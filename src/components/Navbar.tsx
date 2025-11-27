@@ -81,8 +81,11 @@ const Navbar: React.FC = () => {
               <Link href="/home/favorites" className={`${textColor}`}>
                 Favorites
               </Link>
-              <Link href="/home/exchanges" className={`${textColor}`}>
+              <Link href="/home/compare" className={`${textColor}`}>
                 Exchanges
+              </Link>
+              <Link href="/home/exchanges" className={`${textColor}`}>
+                Compare
               </Link>
               <Link href="/home/about" className={`${textColor}`}>
                 About
@@ -115,6 +118,14 @@ const Navbar: React.FC = () => {
               } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
             >
               Exchanges
+            </Link>
+            <Link
+              href="/home/compare"
+              className={`hover:${
+                theme === "dark" ? "text-yellow-400" : "text-black"
+              } ${textColor} transition-colors duration-300 p-3 hover:bg-black dark:hover:bg-white rounded-xl`}
+            >
+              Compare
             </Link>
             <Link
               href="/home/about"
