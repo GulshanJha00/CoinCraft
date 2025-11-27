@@ -15,6 +15,7 @@ import {
   Title,
 } from "chart.js";
 import { Line, Bar, Pie, Doughnut, Scatter } from "react-chartjs-2";
+import ChartExplanations from "@/components/ChartExplanations";
 
 ChartJS.register(
   CategoryScale,
@@ -225,9 +226,18 @@ console.log("Raw Market Caps:", rawMarketCaps);
         // dedupe by date
         cleanPrices = cleanPrices.filter((p: any, i: number, arr: any[]) => i === arr.findIndex(x => x.date === p.date));
 
-        // smooth spikes (30% heuristic)
+
+// [
+//   { date: "2024-01-01", price: 100 }, 
+//   { date: "2024-01-02", price: 105 }, |105 - 100| / 100 = 0.05 = 5% 
+// |105 - 900| / 900 ≈ 0.88 = 88%
+//   { date: "2024-01-03", price: 900 },   750% increase
+//   { date: "2024-01-04", price: 110 },
+//   { date: "2024-01-05", price: 115 }
+// ]
+        // smooth spikes 
         cleanPrices = cleanPrices.map((p: any, i: number, arr: any[]) => {
-          if (i === 0 || i === arr.length - 1) return p;
+          if (i === 0 || i === arr.length - 1) return p; //curr and last have no prev and next
           const prev = arr[i - 1].price;
           const next = arr[i + 1].price;
           if (!prev || !next) return p;
@@ -515,10 +525,12 @@ console.log("Cleaned Market Caps:", alignedCaps);
         {bigAfter ? <Line data={bigAfter} /> : <p className="text-center">Loading main cleaned chart...</p>}
       </div>
 
+       {/* <ChartCard height={350} width={400} title="30-Day Price (Before)">{priceBefore && <Line data={priceBefore}  />}</ChartCard> */}
+
       {/* BEFORE charts */}
       <h2 className="text-xl font-semibold mb-4">BEFORE (Raw / Uncleaned) — other charts (30d)</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <ChartCard title="30-Day Price (Before)">{priceBefore && <Line data={priceBefore} />}</ChartCard>
+        <ChartCard title="30-Day Price (Before)">{priceBefore && <Line data={priceBefore}  />}</ChartCard>
         <ChartCard title="7-Day Price (Before)">{weeklyBefore && <Line data={weeklyBefore} />}</ChartCard>
         <ChartCard title="Volume (Before)">{volumeBefore && <Bar data={volumeBefore} />}</ChartCard>
         <ChartCard title="Market Metrics (Before)">{pieBefore && <Pie data={pieBefore} />}</ChartCard>
@@ -531,7 +543,7 @@ console.log("Cleaned Market Caps:", alignedCaps);
       <h2 className="text-xl font-semibold mb-4">AFTER (Cleaned / Processed) — other charts (30d)</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <ChartCard title="30-Day Price (After)">{priceAfter && <Line data={priceAfter} />}</ChartCard>
+        <ChartCard title="30-Day Price (After)">{priceAfter && <Line data={priceAfter}  />}</ChartCard>
         <ChartCard title="7-Day Price (After)">{weeklyAfter && <Line data={weeklyAfter} />}</ChartCard>
         <ChartCard title="Volume (After)">{volumeAfter && <Bar data={volumeAfter} />}</ChartCard>
         <ChartCard title="Market Metrics (After)">{pieAfter && <Pie data={pieAfter} />}</ChartCard>
@@ -539,16 +551,27 @@ console.log("Cleaned Market Caps:", alignedCaps);
         <ChartCard title="Price vs MarketCap (After)">{scatterAfter && <Scatter data={scatterAfter} />}</ChartCard>
         <ChartCard title="Portfolio Breakdown (After)">{doughnutAfter && <Doughnut data={doughnutAfter} />}</ChartCard>
       </div>
+      <ChartExplanations/>
+
     </div>
   );
 }
+
+// function ChartCard({ title, children, height, width }: { title: string; children: React.ReactNode, height: number, width: string }) {
+//   return (
+//     <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md" style={{ width }}>
+//       <h3 className="text-lg font-medium mb-2 text-center">{title}</h3>
+//       <div style={{ height}}>{children}</div>
+//     </div>
+//   );
+// }
 
 /* Small helper card */
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
       <h3 className="text-lg font-medium mb-2 text-center">{title}</h3>
-      <div style={{ height: 260 }}>{children}</div>
+      <div style={{ height: 260}}>{children}</div>
     </div>
   );
 }
