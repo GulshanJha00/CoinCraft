@@ -111,11 +111,11 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
           <h1 className="text-yellow-600 dark:text-yellow-300">24h Change</h1>
           {market_cap_change_percentage_24h > 0 ? (
             <h1 className="text-green-700 font-bold">
-              {market_cap_change_percentage_24h.toFixed(2)}%
+              {market_cap_change_percentage_24h}%
             </h1>
           ) : (
             <h1 className="text-red-700 font-bold">
-              {market_cap_change_percentage_24h.toFixed(2)}%
+              {market_cap_change_percentage_24h}%
             </h1>
           )}
         </div>
