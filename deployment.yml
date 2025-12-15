@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coinverse-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: coinverse
+  template:
+    metadata:
+      labels:
+        app: coinverse
+    spec:
+      containers:
+        - name: coinverse-container
+          image: gulshanjha0/coinverse
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: coinverse-service
+spec:
+  type: NodePort
+  selector:
+    app: coinverse
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30080

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { Line, Bar } from "react-chartjs-2";
+import { Line, Bar, Scatter } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,7 +12,10 @@ import {
   BarElement,
   Tooltip,
   Legend,
+  Title,
 } from "chart.js";
+
+import { COINS } from "./mockData";
 
 ChartJS.register(
   CategoryScale,
@@ -21,206 +24,206 @@ ChartJS.register(
   PointElement,
   BarElement,
   Tooltip,
-  Legend
+  Legend,
+  Title
 );
 
 export default function ComparePage() {
-  const [coinsList, setCoinsList] = useState<any[]>([]);
-  const [coin1, setCoin1] = useState<string>("");
-  const [coin2, setCoin2] = useState<string>("");
+  const [coin1, setCoin1] = useState("bitcoin");
+  const [coin2, setCoin2] = useState("ethereum");
 
-  const [details1, setDetails1] = useState<any>(null);
-  const [details2, setDetails2] = useState<any>(null);
+  const details1 = COINS.find((c) => c.id === coin1)!;
+  const details2 = COINS.find((c) => c.id === coin2)!;
 
-  const [chart1, setChart1] = useState<any>(null);
-  const [chart2, setChart2] = useState<any>(null);
+  const prices1 = details1.prices;
+  const prices2 = details2.prices;
 
-  const [range, setRange] = useState(30);
+  const labels = prices1.map((_, i) => `Day ${i + 1}`);
 
-  // Fetch all coins for dropdown
-  useEffect(() => {
-    async function loadCoins() {
-      const r = await fetch(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=200"
-      );
-      const data = await r.json();
-      setCoinsList(data);
-      setCoin1("bitcoin"); // default
-      setCoin2("ethereum");
-    }
-    loadCoins();
-  }, []);
+  // --------- MATH ---------
+  const volatility = (arr: number[]) => {
+    const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+    const variance =
+      arr.reduce((a, b) => a + (b - mean) ** 2, 0) / arr.length;
+    return Math.sqrt(variance);
+  };
 
-  // Fetch details + price chart
-  async function loadCoinData(id: string, setD: any, setC: any) {
-    if (!id) return;
+  const growth = (arr: number[]) =>
+    ((arr[arr.length - 1] - arr[0]) / arr[0]) * 100;
 
-    const d = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
-    const dd = await d.json();
-    setD(dd);
+  const vol1 = volatility(prices1);
+  const vol2 = volatility(prices2);
 
-    const c = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${range}`
-    );
-    const ch = await c.json();
-
-    const prices = ch.prices || [];
-
-    setC({
-      labels: prices.map((p: any) => new Date(p[0]).toLocaleDateString()),
-      data: prices.map((p: any) => p[1]),
-    });
-  }
-
-  useEffect(() => {
-    loadCoinData(coin1, setDetails1, setChart1);
-    loadCoinData(coin2, setDetails2, setChart2);
-  }, [coin1, coin2, range]);
+  const growth1 = growth(prices1);
+  const growth2 = growth(prices2);
 
   return (
     <div className="min-h-screen p-8 bg-gray-50 dark:bg-gray-900">
 
-      <h1 className="text-3xl font-bold text-center mb-6">Crypto Comparison</h1>
+      <h1 className="text-3xl font-bold text-center mb-10">
+        Compare Cryptocurrencies
+      </h1>
 
-      {/* Dropdowns */}
+      {/* SELECTORS */}
       <div className="flex flex-col md:flex-row gap-4 justify-center mb-10">
-
         <select
-          className="p-3 rounded-lg bg-white dark:bg-gray-800 border w-full md:w-64"
           value={coin1}
           onChange={(e) => setCoin1(e.target.value)}
-        >
-          <option value="">Select First Coin</option>
-          {coinsList.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name} ({c.symbol.toUpperCase()})
-            </option>
-          ))}
-        </select>
-
-        <select
-          className="p-3 rounded-lg bg-white dark:bg-gray-800 border w-full md:w-64"
-          value={coin2}
-          onChange={(e) => setCoin2(e.target.value)}
-        >
-          <option value="">Select Second Coin</option>
-          {coinsList.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name} ({c.symbol.toUpperCase()})
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={range}
-          onChange={(e) => setRange(Number(e.target.value))}
           className="p-3 rounded-lg bg-white dark:bg-gray-800 border"
         >
-          <option value={7}>7 Days</option>
-          <option value={14}>14 Days</option>
-          <option value={30}>30 Days</option>
-          <option value={90}>90 Days</option>
+          {COINS.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name} ({c.symbol.toUpperCase()})
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={coin2}
+          onChange={(e) => setCoin2(e.target.value)}
+          className="p-3 rounded-lg bg-white dark:bg-gray-800 border"
+        >
+          {COINS.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name} ({c.symbol.toUpperCase()})
+            </option>
+          ))}
         </select>
       </div>
 
-      {/* DETAILS GRID */}
+      {/* COIN CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-
-        {/* COIN 1 CARD */}
-        {details1 && (
-          <CoinCard details={details1} />
-        )}
-
-        {/* COIN 2 CARD */}
-        {details2 && (
-          <CoinCard details={details2} />
-        )}
+        <CoinCard details={details1} />
+        <CoinCard details={details2} />
       </div>
 
-      {/* PRICE COMPARISON */}
-      <h2 className="text-2xl text-center font-bold mb-4">
-        Price Comparison ({range} Days)
+      {/* PRICE CHART */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-12 h-[420px]">
+        <Line
+          data={{
+            labels,
+            datasets: [
+              {
+                label: details1.name,
+                data: prices1,
+                borderColor: "#ef4444",
+                backgroundColor: "rgba(239,68,68,0.2)",
+              },
+              {
+                label: details2.name,
+                data: prices2,
+                borderColor: "#3b82f6",
+                backgroundColor: "rgba(59,130,246,0.2)",
+              },
+            ],
+          }}
+        />
+      </div>
+
+      {/* MARKET CAP */}
+      <ComparisonBar
+        title="Market Cap"
+        labels={[details1.name, details2.name]}
+        values={[
+          details1.market_data.market_cap.usd,
+          details2.market_data.market_cap.usd,
+        ]}
+      />
+
+      {/* VOLUME */}
+      <ComparisonBar
+        title="24h Volume"
+        labels={[details1.name, details2.name]}
+        values={[
+          details1.market_data.total_volume.usd,
+          details2.market_data.total_volume.usd,
+        ]}
+      />
+
+      {/* VOLATILITY */}
+      <ComparisonBar
+        title="Volatility (Risk)"
+        labels={[details1.name, details2.name]}
+        values={[vol1, vol2]}
+      />
+
+      {/* GROWTH */}
+      <ComparisonBar
+        title="Growth %"
+        labels={[details1.name, details2.name]}
+        values={[growth1, growth2]}
+      />
+
+      {/* RISK vs REWARD */}
+      <h2 className="text-xl font-bold text-center mb-4">
+        Risk vs Reward
       </h2>
 
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-12" style={{ height: 400 }}>
-        {chart1 && chart2 ? (
-          <Line
-            data={{
-              labels: chart1.labels,
-              datasets: [
-                {
-                  label: details1.name,
-                  data: chart1.data,
-                  borderColor: "#ff6384",
-                  backgroundColor: "rgba(255,99,132,0.2)",
-                },
-                {
-                  label: details2.name,
-                  data: chart2.data,
-                  borderColor: "#36a2eb",
-                  backgroundColor: "rgba(54,162,235,0.2)",
-                },
-              ],
-            }}
-          />
-        ) : (
-          <p className="text-center">Loading...</p>
-        )}
-      </div>
-
-      {/* MARKET CAP BAR CHART */}
-      <h2 className="text-2xl font-bold text-center mb-4">Market Cap Comparison</h2>
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-12" style={{ height: 300 }}>
-        <Bar
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg h-[350px]">
+        <Scatter
           data={{
-            labels: [details1?.name, details2?.name],
             datasets: [
               {
-                label: "Market Cap (USD)",
-                data: [
-                  details1?.market_data?.market_cap?.usd,
-                  details2?.market_data?.market_cap?.usd,
-                ],
-                backgroundColor: ["#ff6384", "#36a2eb"],
+                label: details1.name,
+                data: [{ x: vol1, y: growth1 }],
+                backgroundColor: "#ef4444",
+              },
+              {
+                label: details2.name,
+                data: [{ x: vol2, y: growth2 }],
+                backgroundColor: "#3b82f6",
               },
             ],
           }}
-        />
-      </div>
-
-      {/* VOLUME COMP */}
-      <h2 className="text-2xl font-bold text-center mb-4">Trading Volume Comparison</h2>
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-12" style={{ height: 300 }}>
-        <Bar
-          data={{
-            labels: [details1?.name, details2?.name],
-            datasets: [
-              {
-                label: "24h Volume (USD)",
-                data: [
-                  details1?.market_data?.total_volume?.usd,
-                  details2?.market_data?.total_volume?.usd,
-                ],
-                backgroundColor: ["#f97316", "#22c55e"],
+          options={{
+            scales: {
+              x: {
+                title: { display: true, text: "Volatility (Risk)" },
               },
-            ],
+              y: {
+                title: { display: true, text: "Growth % (Reward)" },
+              },
+            },
           }}
         />
       </div>
-
     </div>
   );
 }
 
-function CoinCard({ details }: { details: any }) {
+/* ---------------- COMPONENTS ---------------- */
+
+function ComparisonBar({ title, labels, values }: any) {
+  return (
+    <>
+      <h2 className="text-2xl font-bold text-center mb-4">{title}</h2>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-12 h-[300px]">
+        <Bar
+          data={{
+            labels,
+            datasets: [
+              {
+                label: title,
+                data: values,
+                backgroundColor: ["#ef4444", "#3b82f6"],
+              },
+            ],
+          }}
+        />
+      </div>
+    </>
+  );
+}
+
+function CoinCard({ details }: any) {
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
       <div className="flex items-center gap-6">
         <Image
-          src={details.image?.large}
+          src={details.image.large}
           alt={details.name}
-          width={96}
-          height={96}
+          width={90}
+          height={90}
           className="rounded-full"
         />
         <div>
@@ -229,12 +232,18 @@ function CoinCard({ details }: { details: any }) {
           </h2>
           <p><b>Rank:</b> {details.market_cap_rank}</p>
           <p><b>Market Cap:</b> ${details.market_data.market_cap.usd.toLocaleString()}</p>
-          <p><b>High 24h:</b> ${details.market_data.high_24h.usd.toLocaleString()}</p>
-          <p><b>Low 24h:</b> ${details.market_data.low_24h.usd.toLocaleString()}</p>
+          <p><b>24h High:</b> ${details.market_data.high_24h.usd}</p>
+          <p><b>24h Low:</b> ${details.market_data.low_24h.usd}</p>
           <p>
             <b>24h Change:</b>{" "}
-            <span className={details.market_data.price_change_percentage_24h > 0 ? "text-green-500" : "text-red-500"}>
-              {details.market_data.price_change_percentage_24h.toFixed(2)}%
+            <span
+              className={
+                details.market_data.price_change_percentage_24h >= 0
+                  ? "text-green-500"
+                  : "text-red-500"
+              }
+            >
+              {details.market_data.price_change_percentage_24h}%
             </span>
           </p>
         </div>

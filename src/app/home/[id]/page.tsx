@@ -223,18 +223,22 @@ console.log("Raw Market Caps:", rawMarketCaps);
         //removing all -ve values 
         let cleanPrices = rawPrices.filter((p: any) => typeof p.price === "number" && p.price > 0);
 
-        // dedupe by date
+        // dedupe by date. Same date → multiple entries.
         cleanPrices = cleanPrices.filter((p: any, i: number, arr: any[]) => i === arr.findIndex(x => x.date === p.date));
+        //2024-01-01 → price A  
+        // 2024-01-01 → price B
 
 
-// [
-//   { date: "2024-01-01", price: 100 }, 
-//   { date: "2024-01-02", price: 105 }, |105 - 100| / 100 = 0.05 = 5% 
-// |105 - 900| / 900 ≈ 0.88 = 88%
-//   { date: "2024-01-03", price: 900 },   750% increase
-//   { date: "2024-01-04", price: 110 },
-//   { date: "2024-01-05", price: 115 }
-// ]
+
+        // [
+        //   { date: "2024-01-01", price: 100 }, 
+        //   { date: "2024-01-02", price: 105 }, |105 - 100| / 100 = 0.05 = 5% 
+        // |105 - 900| / 900 ≈ 0.88 = 88%
+        //   { date: "2024-01-03", price: 900 },   750% increase
+        //   { date: "2024-01-04", price: 110 },
+        //   { date: "2024-01-05", price: 115 }
+        // ]
+        
         // smooth spikes 
         cleanPrices = cleanPrices.map((p: any, i: number, arr: any[]) => {
           if (i === 0 || i === arr.length - 1) return p; //curr and last have no prev and next
